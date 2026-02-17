@@ -172,11 +172,11 @@ python manage.py uploadOwl --filepath Example/NewStarT.owl --language en --make_
 ```
 
 Command parameter:
-*`--filepath __filepath__` - local/global path to the OWL file
-*`--language __language__` - language tag used in label (e.g. en, lv)
-`--make_config` - ability to make config file to speed OWL upload next time (!Will only work if Object, Data and answer type IRIs are not changed!)
-`--config_filename` - output file path for configuration file
-`--conf` - configuration file to reduce needed user input
+- *`--filepath __filepath__` - local/global path to the OWL file
+- *`--language __language__` - language tag used in label (e.g. en, lv)
+- `--make_config` - ability to make config file to speed OWL upload next time (!Will only work if Object, Data and answer type IRIs are not changed!)
+- `--config_filename` - output file path for configuration file
+- `--conf` - configuration file to reduce needed user input
 
 To upload your own OWL file, follow instructions in the command.
 
@@ -228,8 +228,6 @@ deactivate
 
 - **Database Connection Issues**: Ensure that your database server is running and that the credentials in the `.env` file are correct.
 - **Missing Packages**: If you encounter missing package errors, verify that your virtual environment is activated before running any commands.
-- **Excel File Upload Errors**: Ensure that the data in the Excel file is consistent, all required fields are filled, and all sheet names match the expected format (`Category`, `Recommendation`, `Question`, `RecommendationQuestion`).
-- **Email Sending Issues**: Verify your SMTP settings in the `.env` file and ensure that you have enabled access for less secure apps or set up an App Password if using Google SMTP.
 
 ## Contributing
 
@@ -250,10 +248,3 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 
-## Acknowledgement
- - This research was funded by the Latvian Council of Science, project “Testing Interventions and Developing a Knowledge-based Recommendation System to Reduce Plate Waste in School Catering in Latvia”, project No. lzp-2022/1-0492
-
-## Citation
-![Article_Banner_MDPI_applsci-15-10482_page-0001](https://github.com/user-attachments/assets/7aba1077-5f9c-4bf4-9e2f-88050a28a924)
-
-Kodors, S.; Apeinans, I.; Zarembo, I.; Lonska, J. RecGen: No-Coding Shell of Rule-Based Expert System with Digital Twin and Capability-Driven Approach Elements for Building Recommendation Systems. Appl. Sci. 2025, 15, 10482. https://doi.org/10.3390/app151910482
