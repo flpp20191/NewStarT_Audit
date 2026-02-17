@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>{% block title %}Audit Base{% endblock %}</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.7/dist/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+        {% comment %} <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script> {% endcomment %}
+
+        {% block load %}
+        {% endblock %}
+
+        {% block static_files %}
+        {% endblock %}
+        <style>
+            html, body {
+                margin: 0;
+                padding: 0;
+                {% comment %} overflow-x: hidden; {% endcomment %}
+            }
+        </style>
+    </head>
+    <body>
+        <div class="w-100 d-flex justify-content-center position-absolute mt-5" id="message">
+            <dl class="d-flex flex-column justify-content-center messages">
+                {% if messages %}
+                {% for message in messages %}
+                <dd class="message" id="message_{{forloop.counter}}">
+                    <div class="alert alert-{{ message.tags }} m-0 p-2 d-flex align-items-center w-100">
+                        <a href="#" class="close close-{{ message.tags }} mx-3" data-dismiss="alert" aria-label="close" value="message_{{forloop.counter}}">X</a>
+                        <strong>{{ message }}</strong>
+                    </div>
+                </dd>
+                {% endfor %}
+                {% endif %}
+            </dl>
+        </div>
+
+        <div class="d-flex min-vh-100">
+            {% include "Audit/audit_navigation.html" %}
+            <div class="d-flex w-100">
+                {% block content %}
+                {% endblock %}
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,57 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container-fluid mt-4">
+        <div class="container my-4">
+            <h4 class="d-flex align-items-center">
+                {{ subtheme.name }}
+            </h4>
+        </div>
+        <div class="ms-4">
+            <form method="post">
+                {% csrf_token %}
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Question</th>
+                            <th scope="col">Answer</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for question, answer in questions.items %}
+                        <tr>
+                            <td>{{ question.question }}</td>
+                            <td>
+                                {% if question.answerType == QUESTION_TYPE.YES_NO %}
+                                <select name="{{ question.id }}">
+                                    <option value="true" {% if answer == 'true' %}selected{% endif %}>Yes</option>
+                                    <option value="false" {% if answer == 'false' %}selected{% endif %}>No</option>
+                                </select>
+                                {% elif question.answerType == QUESTION_TYPE.INTERVAL %}
+                                <input type="number" value="{{ answer }}" name="{{ question.id }}">
+                                {% elif question.answerType == QUESTION_TYPE.LIKERTA %}
+                                <select name="{{ question.id }}">
+                                    {% for likert in question.likerta %}
+                                        <option value="{{likert}}" {% if answer == likert %}selected{% endif %}>{{likert}}</option>
+                                    {% endfor %}
+                                </select>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                        <tr>
+                            <td colspan="2" class="text-end">
+                                {% comment %} <input type="submit" class="btn btn-secondary me-2" value="Back"> {% endcomment %}
+                                <button type="submit" name="action" class="btn btn-primary" value="save">Save</button>
+                                <button type="submit" name="action" class="btn btn-secondary" value="dashboard">Save and Dashboard</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </form>
+        </div>
+    </div>
+
+{% endblock %}

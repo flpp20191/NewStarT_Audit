@@ -1,0 +1,28 @@
+HAS_CATEGORY:
+- https://newstart.rta.lv#hasCategory
+HAS_QUESTION_TYPE: true
+QUESTION_TYPE:
+    INTERVAL:
+        MAX:
+        - https://newstart.rta.lv#hasMaxAllowedValue
+        MIN:
+        - https://newstart.rta.lv#hasMinAllowedValue
+    LIKERT:
+        LIKERT_ANSWER_PROPERTY:
+        - https://newstart.rta.lv#hasExpectedAnswer
+        LIKERT_CHOICES:
+        - https://newstart.rta.lv#hasAnswerOptions
+        SEPERATOR: '
+
+            '
+    MANDATORY:
+    - https://newstart.rta.lv#isMandatory
+    PROPERTIES:
+    - https://newstart.rta.lv#hasAnswerType
+    TYPES:
+        interval:
+        - https://newstart.rta.lv#interval
+        likert:
+        - https://newstart.rta.lv#likert
+        yes_no:
+        - https://newstart.rta.lv#yesno

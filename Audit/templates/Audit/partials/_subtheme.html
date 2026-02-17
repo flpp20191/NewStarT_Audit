@@ -1,0 +1,67 @@
+{% load get_item %}
+
+{% for iri in subthemes %}
+    {% with subtheme=subthemes|get_item:iri %}
+        <div class="h5 bg-light p-2 mt-3 mb-1 border-bottom" style="{% if depth > 0 %}margin-left:{{depth}}rem{% endif %}">
+            <a class="{% if not subtheme.subthemes|length > 0 %}text-decoration-none text-dark{% endif %}" data-toggle="collapse" href="#collapse{{subtheme.pk}}" role="button" aria-expanded="false" aria-controls="collapse{{subtheme.pk}}">
+                <div class="d-flex w-100 align-items-center justify-content-between">
+                    {% if subtheme.name %}{{subtheme.name}}{% else %}Bez nosaukuma{% endif %}
+                    {% if subtheme.questions %}
+                    <div class="mx-3">
+                        <a href="{% url 'audit:question_form' pk=subtheme.pk %}" class="btn btn-outline-primary text-primary">Answer questions</a>
+                    </div>
+                    {% endif %}
+                </div>
+            </a>
+            {% if subtheme.subthemes|length > 0 %}
+            <div class="collapse" id="collapse{{subtheme.pk}}">
+                {% include 'Audit/partials/_subtheme.html' with subthemes=subtheme.subthemes depth=depth|add:1 %}
+            </div>
+            {% endif %}
+        </div>
+    {% endwith %}
+{% endfor %}
+
+{% comment %} {% for subtheme in audit_tree %}
+    <div class="py-0 row spacing my-0 me-0 ml-{{depth}}">
+        <a class="p-2 subtheme px-0" data-bs-toggle="collapse" href="#collapse_{{subtheme.pk}}" aria-expanded="{% if depth == 0 and subtheme.answered == 0 %}true{% else %}false{% endif %}" aria-controls="collapse_{{subtheme.pk}}" value="collapse_{{ subtheme.pk }}">
+            <div>
+                {{subtheme.name|safe}} <span class="answered_subtheme_ammount" answered="{{subtheme.answered}}" total="{{subtheme.total}}"></span>
+            </div>
+        </a>
+        <div class="collapse {% if depth == 0 and subtheme.answered == 0 %}show{% endif %} px-0" id="collapse_{{subtheme.pk}}">   
+            {% for q_pk in subtheme.questionnaire %}
+                {% with questionnaire=auditTree|get_key:q_pk %}
+                    {% if questionnaire.active %}
+                        <div id="questionnaire_{{questionnaire.pk}}" class="subtheme py-1 d-none d-sm-flex justify-content-between ml-2 spacing{% if questionnaire.skip == 1 %} skipped{% endif %} {% if questionnaire.answered == 0 %} highlight {% elif questionnaire.answered != questionnaire.total %} highlight2 {% endif %}">
+                            <div class="d-flex align-self-center">
+                                {{questionnaire.name}} <span class="answered_ammount ms-1" answered="{{questionnaire.answered}}" total="{{questionnaire.total}}"></span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <a class="button p-2 text-noweap" href="{% url 'audit:wizard:Wizard' subtheme_path|add:s_pk questionnaire.pk %}">
+                                    {% if questionnaire.answered == 0 %}
+                                    Atbildēt
+                                    {% elif questionnaire.answered != questionnaire.total %}
+                                    Turpināt atbildēt
+                                    {% else %}
+                                    Mainīt atbildes
+                                    {% endif %}
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="row spacing m-0 py-1 ml-{{depth}}">
+                            <div class="p-2 text-danger subtheme">
+                                ✘ {{questionnaire.name}} - Uzņēmums neatbilst šai katregorijai
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endwith%}
+            {% endfor %}
+
+            {% if subtheme.subtheme|length > 0 %}
+            {% include 'Audit/audit_subthemes.html' with auditTree=auditTree subthemes_pks=subtheme.subtheme subtheme_path=subtheme_path|add:s_pk depth=2 %}
+            {% endif %}
+        </div>
+    </div>
+{% endfor %} {% endcomment %}

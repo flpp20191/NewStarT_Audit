@@ -1,0 +1,50 @@
+<div class="d-flex flex-column flex-shrink-0 p-3 bg-light" style="width: 280px;">
+    <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+            {% url 'audit:audit' as link %}
+            <a href="{{ link }}" class="nav-link {% if link == request.path %}active{% endif %}" aria-current="page">
+                NewStarT audit
+            </a>
+        </li>
+        <hr>
+        {% if user.is_authenticated %}
+        <li class="nav-item">
+            {% url 'audit:user_category_form' as link %}
+            <a href="{{ link }}" class="nav-link {% if link == request.path %}active{% endif %}" aria-current="page">
+                Category selection
+            </a>
+        </li>
+        <li class="nav-item">
+            {% url 'audit:user_subtheme_list' as link %}
+            <a href="{{ link }}" class="nav-link {% if link == request.path %}active{% endif %}" aria-current="page">
+                Subtheme selection
+            </a>
+        </li>
+        <li class="nav-item">
+            {% if request.user.usercategory.category.first.subcategories.count > 0 %}
+                {% url 'audit:dashboard' pk=request.user.usercategory.category.first.pk as link %}
+            {% else %}
+                {% url 'audit:dashboard' as link %}
+            {% endif %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:dashboard" %}active{% endif %}" aria-current="page">
+                Dashboard
+            </a>
+        </li>
+        <li class="nav-item">
+            {% url 'audit:recommendations' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:recommendations" %}active{% endif %}" aria-current="page">
+                Recommendations
+            </a>
+        </li>
+        <hr>
+        {% endif %}
+        {% if request.user.is_superuser %}
+        <li class="nav-item">
+            {% url 'audit:audit_settings' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:audit_settings" %}active{% endif %}" aria-current="page">
+                Settings
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</div>
