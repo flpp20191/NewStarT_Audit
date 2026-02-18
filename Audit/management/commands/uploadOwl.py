@@ -102,9 +102,14 @@ class Command(BaseCommand):
 
         MIN_RANGE: set = None
         MAX_RANGE: set = None
+
+        HAS_GROUP: set = None
+        HAS_HINT_TEXT: set = None
         
         if CONFIGS:
             HAS_CATEGORY = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_CATEGORY"]) if "HAS_CATEGORY" in CONFIGS else HAS_CATEGORY
+            HAS_GROUP = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_GROUP"]) if "HAS_GROUP" in CONFIGS else HAS_GROUP
+            HAS_HINT_TEXT = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_HINT_TEXT"]) if "HAS_HINT_TEXT" in CONFIGS else HAS_HINT_TEXT
             HAS_QUESTION_TYPE = CONFIGS["HAS_QUESTION_TYPE"] if "HAS_QUESTION_TYPE" in CONFIGS else None
             if "QUESTION_TYPE" in CONFIGS:
                 MANDATORY_QUESTIONS = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["MANDATORY"]) if "MANDATORY" in CONFIGS["QUESTION_TYPE"] else None
@@ -157,7 +162,7 @@ class Command(BaseCommand):
             HAS_CATEGORY = set()
             display_object_properties()
             self.stdout.write(f"\n{CMD_LIGHT_GREY}Relation that describes category belonging, used to organise question answers in Dashboard\nExpected format: 'Question(Class)'->hasCategory->'Category(Class)'{CMD_RESET}")
-            category_belonging_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split()))
+            category_belonging_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")))
             # USED_OBJECT_PROPERTIES.union(category_belonging_numbers)
             USED_OBJECT_PROPERTIES.update(category_belonging_numbers)
 
@@ -199,7 +204,7 @@ class Command(BaseCommand):
                 QUESTION_TYPE_PROPERIES = set()
                 display_object_properties()
                 self.stdout.write(f"\n{CMD_LIGHT_GREY}Expected answer type.\nExpected format: 'QuestionType(Class)'->hasAnswerType->'YesNo(Class)'{CMD_RESET}")
-                question_type_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split()))
+                question_type_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")))
                 for x in question_type_numbers:
                     if x in USED_OBJECT_PROPERTIES: continue
                     USED_OBJECT_PROPERTIES.add(x)
@@ -244,7 +249,7 @@ class Command(BaseCommand):
                 LIKERT_CHOICES = set()
                 display_data_properties()
                 self.stdout.write(f"\n{CMD_LIGHT_GREY}Likerta answer options.\nExpected format: 'hasAnswerOptions(DataProperty) value 'Answer option text'(str){CMD_RESET}")
-                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split()):
+                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")):
                     if x in USED_DATA_PROPERTIES: continue
                     USED_DATA_PROPERTIES.add(x)
                     LIKERT_CHOICES.add(DATA_PROPERTIES[x])
@@ -257,7 +262,7 @@ class Command(BaseCommand):
                 LIKERT_ANSWER_PROPERTY = set()
                 display_data_properties()
                 self.stdout.write(f"\n{CMD_LIGHT_GREY}Likerta expected answer text.\nExpected format: 'hasAnswer(DataProperty) value 'Answer option'(str){CMD_RESET}")
-                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split()):
+                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")):
                     if x in USED_DATA_PROPERTIES: continue
                     USED_DATA_PROPERTIES.add(x)
                     LIKERT_ANSWER_PROPERTY.add(DATA_PROPERTIES[x])
@@ -266,7 +271,7 @@ class Command(BaseCommand):
                 MIN_RANGE = set()
                 display_data_properties()
                 self.stdout.write(f"\n{CMD_LIGHT_GREY}Interval min value.\nExpected format: 'hasMinValue(DataProperty) value '100'(flaot){CMD_RESET}")
-                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split()):
+                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")):
                     if x in USED_DATA_PROPERTIES: continue
                     USED_DATA_PROPERTIES.add(x)
                     MIN_RANGE.add(DATA_PROPERTIES[x])
@@ -275,7 +280,7 @@ class Command(BaseCommand):
                 MAX_RANGE = set()
                 display_data_properties()
                 self.stdout.write(f"\n{CMD_LIGHT_GREY}Interval max value.\nExpected format: 'hasMaxValue(DataProperty) value '100'(flaot){CMD_RESET}")
-                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split()):
+                for x in map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")):
                     if x in USED_DATA_PROPERTIES: continue
                     USED_DATA_PROPERTIES.add(x)
                     MAX_RANGE.add(DATA_PROPERTIES[x])
@@ -283,42 +288,35 @@ class Command(BaseCommand):
         if MANDATORY_QUESTIONS == None:
             MANDATORY_QUESTIONS = set()
             display_data_properties()
-            self.stdout.write(f"\n{CMD_LIGHT_GREY}Required questions (questions that are higlighted, can be empty).\nExpected dormat: 'required(DataProperty) value 'true'(bool){CMD_RESET}")
-            for x in map(int, input("Property numbers (e.g. '1, 2'): ").split()):
+            self.stdout.write(f"\n{CMD_LIGHT_GREY}Required questions (questions that are higlighted, can be empty).\nExpected format: 'required(DataProperty) value 'true'(bool){CMD_RESET}")
+            for x in map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")):
                 if x in USED_DATA_PROPERTIES: continue
                 USED_DATA_PROPERTIES.add(x)
                 MANDATORY_QUESTIONS.add(DATA_PROPERTIES[x])
 
-        if options["make_config"]:
-            with open(options["config_filename"] or "conf.yml", 'w') as configs:
-                data = {}
-                data["HAS_CATEGORY"] = [x.iri for x in HAS_CATEGORY]
-                data["HAS_QUESTION_TYPE"] = HAS_QUESTION_TYPE
-                data["QUESTION_TYPE"] = {}
-                data["QUESTION_TYPE"]["MANDATORY"] = [x.iri for x in MANDATORY_QUESTIONS]
-                if HAS_QUESTION_TYPE:
-                    data["QUESTION_TYPE"]["PROPERTIES"] = [x.iri for x in QUESTION_TYPE_PROPERIES]
-                    QT_TO_ANSWER = defaultdict(list)
-                    for x, y in ANSWER_TYPE_MAP.items(): QT_TO_ANSWER[y].append(x.iri)
-                    data["QUESTION_TYPE"]["TYPES"] = {}
-                    for x, y in QT_TO_ANSWER.items():
-                        data["QUESTION_TYPE"]["TYPES"][x] = y
-                else:
-                    data["DEFAULT_ANSWER_TYPE"] = DEFAULT_ANSWER_TYPE
-                
-                if QUESTION_TYPE.LIKERTA in USED_ANSWER_TYPES:
-                    data["QUESTION_TYPE"]["LIKERT"] = {}
-                    LIKERT = data["QUESTION_TYPE"]["LIKERT"]
-                    LIKERT["SEPERATOR"] = LIKERT_CHOICE_SEPERATOR
-                    LIKERT["SEPERATOR"] = LIKERT_CHOICE_SEPERATOR
-                    LIKERT["LIKERT_CHOICES"] = [x.iri for x in LIKERT_CHOICES]
-                    LIKERT["LIKERT_ANSWER_PROPERTY"] = [x.iri for x in LIKERT_ANSWER_PROPERTY]
-                if QUESTION_TYPE.INTERVAL in USED_ANSWER_TYPES:
-                    data["QUESTION_TYPE"]["INTERVAL"] = {}
-                    INTERVAL = data["QUESTION_TYPE"]["INTERVAL"]
-                    INTERVAL["MIN"] = [x.iri for x in MIN_RANGE]
-                    INTERVAL["MAX"] = [x.iri for x in MAX_RANGE]
-                yaml.dump(data, configs, default_flow_style=False, indent=4)
+        if HAS_GROUP == None:
+            HAS_GROUP = set()
+            display_object_properties()
+            self.stdout.write(f"\n{CMD_LIGHT_GREY}Used for question grouping in audit\nExpected format: 'Question(Class)'->hasGroup->'Group(Class)'{CMD_RESET}")
+            group_belonging_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")))
+            # USED_OBJECT_PROPERTIES.union(category_belonging_numbers)
+            USED_OBJECT_PROPERTIES.update(group_belonging_numbers)
+
+            for i, object_property in enumerate(OBJECT_PROPERTIES):
+                if i in group_belonging_numbers:
+                    HAS_GROUP.add(object_property)
+        
+        if HAS_HINT_TEXT == None:
+            HAS_HINT_TEXT = set()
+            display_object_properties()
+            self.stdout.write(f"\n{CMD_LIGHT_GREY}Hint text used for clarifying the answer (e.g. messurment)\nExpected format: 'Question(Class)'->hasHintText->'Hint(Class)'{CMD_RESET}")
+            hint_numbers = list(map(int, input("Property numbers (e.g. '1, 2'): ").split(", ")))
+            # USED_OBJECT_PROPERTIES.union(category_belonging_numbers)
+            USED_OBJECT_PROPERTIES.update(hint_numbers)
+
+            for i, object_property in enumerate(OBJECT_PROPERTIES):
+                if i in hint_numbers:
+                    HAS_HINT_TEXT.add(object_property)
 
         self.stdout.write(self.style.HTTP_INFO("\nUpdating DB data..."))
 
@@ -371,11 +369,18 @@ class Command(BaseCommand):
                 question_text = get_label(question, LANGUAGE)
                 question_obj, created = Question.objects.get_or_create(iri=question.iri)
                 question_obj.question = question_text
+                if not created:
+                    question_obj.hint = ""
+                    question_obj.group = ""
                 if HAS_QUESTION_TYPE:
                     for restriction in question.is_a:
                         if hasattr(restriction, "property") and restriction.property in QUESTION_TYPE_PROPERIES:
                             answer_type = ANSWER_TYPE_MAP.get(restriction.value, QUESTION_TYPE.YES_NO)
                             question_obj.answerType = answer_type
+                        if hasattr(restriction, "property") and restriction.property in HAS_GROUP:
+                            question_obj.group = get_label(restriction.value, LANGUAGE)
+                        if hasattr(restriction, "property") and restriction.property in HAS_HINT_TEXT:
+                            question_obj.hint = get_label(restriction.value, LANGUAGE)
                 else:
                     question_obj.answerType = DEFAULT_ANSWER_TYPE
 
@@ -505,6 +510,42 @@ class Command(BaseCommand):
                     parent_subtheme.save()
                     if subtheme_count[parent_subtheme] == 0 and not parent_subtheme in processed: stack.append(parent_subtheme)
             self.stdout.write(self.style.SUCCESS("Created subtheme types."))
+        
+            if options["make_config"]:
+                self.stdout.write(self.style.HTTP_INFO("Making the configuration file..."))
+                with open(options["config_filename"] or "conf.yml", 'w') as configs:
+                    data = {}
+                    data["HAS_CATEGORY"] = [x.iri for x in HAS_CATEGORY]
+                    data["HAS_GROUP"] = [x.iri for x in HAS_GROUP]
+                    data["HAS_HINT_TEXT"] = [x.iri for x in HAS_HINT_TEXT]
+                    data["HAS_QUESTION_TYPE"] = HAS_QUESTION_TYPE
+                    data["QUESTION_TYPE"] = {}
+                    data["QUESTION_TYPE"]["MANDATORY"] = [x.iri for x in MANDATORY_QUESTIONS]
+                    if HAS_QUESTION_TYPE:
+                        data["QUESTION_TYPE"]["PROPERTIES"] = [x.iri for x in QUESTION_TYPE_PROPERIES]
+                        QT_TO_ANSWER = defaultdict(list)
+                        for x, y in ANSWER_TYPE_MAP.items(): QT_TO_ANSWER[y].append(x.iri)
+                        data["QUESTION_TYPE"]["TYPES"] = {}
+                        for x, y in QT_TO_ANSWER.items():
+                            data["QUESTION_TYPE"]["TYPES"][x] = y
+                    else:
+                        data["DEFAULT_ANSWER_TYPE"] = DEFAULT_ANSWER_TYPE
+                    
+                    if QUESTION_TYPE.LIKERTA in USED_ANSWER_TYPES:
+                        data["QUESTION_TYPE"]["LIKERT"] = {}
+                        LIKERT = data["QUESTION_TYPE"]["LIKERT"]
+                        LIKERT["SEPERATOR"] = LIKERT_CHOICE_SEPERATOR
+                        LIKERT["SEPERATOR"] = LIKERT_CHOICE_SEPERATOR
+                        LIKERT["LIKERT_CHOICES"] = [x.iri for x in LIKERT_CHOICES]
+                        LIKERT["LIKERT_ANSWER_PROPERTY"] = [x.iri for x in LIKERT_ANSWER_PROPERTY]
+                    if QUESTION_TYPE.INTERVAL in USED_ANSWER_TYPES:
+                        data["QUESTION_TYPE"]["INTERVAL"] = {}
+                        INTERVAL = data["QUESTION_TYPE"]["INTERVAL"]
+                        INTERVAL["MIN"] = [x.iri for x in MIN_RANGE]
+                        INTERVAL["MAX"] = [x.iri for x in MAX_RANGE]
+                    yaml.dump(data, configs, default_flow_style=False, indent=4)
+                self.stdout.write(self.style.SUCCESS("Made the cinfiguration file."))
+
 
         self.stdout.write(self.style.SUCCESS(f"Categories created: {_created_categories}, updated: {_updated_categories}"))
         self.stdout.write(self.style.SUCCESS(f"Questions created: {_created_question}, updated: {_updated_question}"))

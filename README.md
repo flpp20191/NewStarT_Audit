@@ -179,10 +179,26 @@ Command parameter:
 - `--conf` - configuration file to reduce needed user input
 
 To upload your own OWL file, follow instructions in the command.
+Expected file structure
+
+File structure:
+- .owl (or any other Python owlready2 compatible format)
+- Data and Object property names can be changed to anything, only the relation structure matters
+
+- (Required) ategory relationship format: 'Question(Class)'->hasSomeObjectProperty->'Category(Class)
+- (For multi question type) Expected question type format: 'QuestionType(Class)'->hasSomeObjectProperty->'YesNo(Class)'
+- (For Likerta) Expected likerta answer choice format: 'hasAnswerOptions(DataProperty)' value 'Answer option text'(str)
+- (For Likerta) Expected likerta answer format: 'hasAnswer(DataProperty) value 'Answer option'(str)
+- (For Interval) Expected min answer range format: 'hasMinValue(DataProperty) value '0'(flaot)
+- (For Interval) Expected max answer range format: 'hasMaxValue(DataProperty) value '100'(flaot)
+- (Optional) Expected higlighted question format: 'required(DataProperty) value 'true'(bool)
+- (Optional) Expected question group format: 'Question(Class)'->hasGroup->'Group(Class)
+- (Optional) Expected hint text format: 'Question(Class)'->hasHintText->'Hint(Class)
 
 This command will:
 - Read the data structure of the OWL file.
 - Ask you to specify which properties corespond to which data structures.
+- Update the DB only if all changes are valid.
 - (Optional) Generate configuration file to speed up OWL upload the next time.
 
 ## Step 7: Run the Development Server

@@ -5,7 +5,10 @@ from .models import *
 
 admin.site.register(Category)
 admin.site.register(Subthemes) 
-admin.site.register(Question)
+@admin.register(Question)
+class QuestionAdmin(admin.ModelAdmin):
+    search_fields = ['question', 'id']
+    list_filter = ["condition__type"]
 
 @admin.register(Condition)
 class ConditionAdmin(admin.ModelAdmin):

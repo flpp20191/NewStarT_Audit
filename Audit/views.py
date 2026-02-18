@@ -61,15 +61,18 @@ class AuditWizard(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         subtheme = self.model.objects.get(id=kwargs.get("pk"))
         questions = subtheme.question_set.filter(condition__type__in=request.user.usercategory.category_set).distinct()
-        form_questions = {}
+        form_question_groups = {}
+        
         for q in questions:
             try: answer = Answer.objects.get(question=q, user=request.user).answer
             except Answer.DoesNotExist: answer = ""
-            form_questions[q] = answer
+            if not q.group in form_question_groups: form_question_groups[q.group] = {}
+            form_question_groups[q.group][q] = answer
+            print(q.group)
         context = {
             "QUESTION_TYPE": QUESTION_TYPE,
             "subtheme": subtheme,
-            "questions": form_questions,
+            "form_question_groups": form_question_groups,
         }
         return render(request, self.template_name, context=context)
     

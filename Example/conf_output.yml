@@ -1,5 +1,10 @@
 HAS_CATEGORY:
 - https://newstart.rta.lv#hasCategory
+HAS_GROUP:
+- https://newstart.rta.lv#hasSpecialization
+- https://newstart.rta.lv#hasGroup
+HAS_HINT_TEXT:
+- https://newstart.rta.lv#hasMesurement
 HAS_QUESTION_TYPE: true
 QUESTION_TYPE:
     INTERVAL:

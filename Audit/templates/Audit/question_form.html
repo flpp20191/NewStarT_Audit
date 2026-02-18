@@ -20,26 +20,34 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for question, answer in questions.items %}
-                        <tr>
-                            <td>{{ question.question }}</td>
-                            <td>
-                                {% if question.answerType == QUESTION_TYPE.YES_NO %}
-                                <select name="{{ question.id }}">
-                                    <option value="true" {% if answer == 'true' %}selected{% endif %}>Yes</option>
-                                    <option value="false" {% if answer == 'false' %}selected{% endif %}>No</option>
-                                </select>
-                                {% elif question.answerType == QUESTION_TYPE.INTERVAL %}
-                                <input type="number" value="{{ answer }}" name="{{ question.id }}">
-                                {% elif question.answerType == QUESTION_TYPE.LIKERTA %}
-                                <select name="{{ question.id }}">
-                                    {% for likert in question.likerta %}
-                                        <option value="{{likert}}" {% if answer == likert %}selected{% endif %}>{{likert}}</option>
-                                    {% endfor %}
-                                </select>
-                                {% endif %}
-                            </td>
-                        </tr>
+                        {% for group, questions in form_question_groups.items %}
+                            {% if group != "" or form_question_groups.items|length > 1 %}
+                            <tr>
+                                <td class="pl-5 h6" collspan="2">{% if group == "" %}Ungrouped{% else %}{{group}}{% endif %}</td>
+                            </tr>
+                            {% endif %}
+                            {% for question, answer in questions.items %}
+                            <tr>
+                                <td>{{ question.question }}</td>
+                                <td>
+                                    {% if question.answerType == QUESTION_TYPE.YES_NO %}
+                                    <select name="{{ question.id }}">
+                                        <option value="true" {% if answer == 'true' %}selected{% endif %}>Yes</option>
+                                        <option value="false" {% if answer == 'false' %}selected{% endif %}>No</option>
+                                    </select>
+                                    {% elif question.answerType == QUESTION_TYPE.INTERVAL %}
+                                    <input type="number" value="{{ answer }}" name="{{ question.id }}">
+                                    {% elif question.answerType == QUESTION_TYPE.LIKERTA %}
+                                    <select name="{{ question.id }}">
+                                        {% for likert in question.likerta %}
+                                            <option value="{{likert}}" {% if answer == likert %}selected{% endif %}>{{likert}}</option>
+                                        {% endfor %}
+                                    </select>
+                                    {% endif %}
+                                    <span class="text-muted"><i>{{ question.hint }}</i></span>
+                                </td>
+                            </tr>
+                            {% endfor %}
                         {% endfor %}
                         <tr>
                             <td colspan="2" class="text-end">

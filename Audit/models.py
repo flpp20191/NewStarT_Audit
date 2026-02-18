@@ -103,6 +103,7 @@ class Question(models.Model):
     weight = models.FloatField(default=1, null=True)
     
     group = models.CharField(default="", null=True, max_length=256)
+    hint = models.CharField(default="", null=True, max_length=256)
     answerType = models.CharField(max_length=50, choices=QUESTION_TYPE.choices, default=QUESTION_TYPE.YES_NO)
     subtheme = models.ManyToManyField(Subthemes, related_name="question_set")
     condition = models.ManyToManyField(Condition, default=None, related_name="condition_set")
