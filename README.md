@@ -23,7 +23,6 @@ Key Features and Concepts:
 - [Deactivating the Virtual Environment](#deactivating-the-virtual-environment)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
-- [License](#license)
 
 ## Prerequisites
 
@@ -245,6 +244,9 @@ deactivate
 - **Database Connection Issues**: Ensure that your database server is running and that the credentials in the `.env` file are correct.
 - **Missing Packages**: If you encounter missing package errors, verify that your virtual environment is activated before running any commands.
 
+## Acknowledgement
+- This research was funded by the "Fundamentālo un lietišķo pētījumu projekti (FLPP)", project "Digital Twin to Promote the Development of Tourism Competitiveness and Complementarity: the Use Case in Latgale region", project No. lzp-2022/1-0350
+
 ## Contributing
 
 If you'd like to contribute to this project, you can fork the repository and submit a pull request with your changes.
@@ -262,5 +264,3 @@ distributed under the License is distributed on an "AS IS" BASIS,
 WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
-
-

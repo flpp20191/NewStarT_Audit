@@ -16,7 +16,7 @@
                     <thead>
                         <tr>
                             <th scope="col">Question</th>
-                            <th scope="col">Answer</th>
+                            <th class="text-center" scope="col">Answer</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -29,7 +29,7 @@
                             {% for question, answer in questions.items %}
                             <tr>
                                 <td>{{ question.question }}</td>
-                                <td>
+                                <td class="text-center w-25">
                                     {% if question.answerType == QUESTION_TYPE.YES_NO %}
                                     <select name="{{ question.id }}">
                                         <option value="true" {% if answer == 'true' %}selected{% endif %}>Yes</option>
