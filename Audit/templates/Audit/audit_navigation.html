@@ -46,5 +46,20 @@
             </a>
         </li>
         {% endif %}
+        {% if request.user.is_authenticated %}
+        <li class="nav-item">
+            {% url 'audit:logout' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:logout" %}active{% endif %}" aria-current="page">
+                Log out
+            </a>
+        </li>
+        {% else %}
+        <li class="nav-item">
+            {% url 'audit:login' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:login" %}active{% endif %}" aria-current="page">
+                Log in
+            </a>
+        </li>
+        {% endif %}
     </ul>
 </div>

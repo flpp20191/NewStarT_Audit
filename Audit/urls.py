@@ -5,6 +5,8 @@ app_name = 'audit'
 
 urlpatterns = [
     path('', views.AuditMain.as_view(), name="audit"),
+    path('login', views.Login.as_view(), name="login"),
+    path('logout', views.Logout.as_view(), name="logout"),
     path('user-category-form/', views.UserCategoryForm.as_view(), name="user_category_form"),
     path('user-subtheme-list/', views.UserSubthemeList.as_view(), name="user_subtheme_list"),
     path('question-form/<int:pk>/', views.AuditWizard.as_view(), name="question_form"),

@@ -10,6 +10,7 @@ from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
 from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
+from django.contrib.auth import authenticate, login, logout
 
 
 class AuditMain(View):
@@ -17,6 +18,32 @@ class AuditMain(View):
 
     def get(self, request, *args, **kwargs):
         return render(request, self.template_name)
+
+class Login(View):
+    template_name = 'Audit/login.html'
+    success_url = "audit:audit"
+
+    def get(self, request, *args, **kwargs):
+        return render(request, self.template_name)
+    
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+
+        if user is not None:
+            login(request, user)
+            return redirect(self.success_url)
+        else:
+            messages.error(request, "Invalid username or password.")
+            return render(request, self.template_name)
+
+class Logout(View):
+    success_url = "audit:audit"
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect(self.success_url)
 
 class UserCategoryForm(LoginRequiredMixin, View):
     model = UserCategory

@@ -220,6 +220,9 @@ python manage.py createsuperuser
 
 Follow the on-screen prompts to set up the username, email, and password. Use superuser credentials to access system.
 
+System has an admin page that can be accessed thru writing in the URL "/admin"
+If this will be used in production, it is advised to change this default URL to something else
+
 ## Additional Commands
 
 
