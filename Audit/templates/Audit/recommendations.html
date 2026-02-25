@@ -61,7 +61,7 @@
                 {% for condition in conditions %}
                 {% with correct_val=correct_answers|get_item:condition %}
                 <tr style="{% if correct_val == False %}{% if not condition.required %}background-color: #ffb5af{% else %}background-color: #ca9a96{% endif %}{% elif correct_val == None %}background-color: #eeeeee{% endif %}">
-                    <td class="{% if question.mandatory.0 %} mandatory{% endif %}">{{ condition.question.question }} {{correct_val}}</td>
+                    <td class="{% if question.mandatory.0 %} mandatory{% endif %}">{{ condition.question.question }}</td>
                     <td class="text-center">
                         {% if answers|get_item:condition %}
                             {% if condition.question.answerType == QUESTION_TYPE.YES_NO %}
@@ -74,11 +74,21 @@
                         {% if condition.question.answerType == QUESTION_TYPE.YES_NO %}
                             {% if not condition.inverse %}Yes{% else %}No{% endif %}
                         {% elif condition.question.answerType == QUESTION_TYPE.LIKERTA %}
-                            {% if condition.min %}Min: {{ condition.question.likerta|get_item:condition.min }}{% endif %}<br>
-                            {% if condition.max %}Max: {{ condition.question.likerta|get_item:condition.max }}{% endif %}
+                            {% if not condition.inverse %}
+                                {% if condition.min %}Min: {{ condition.question.likerta|get_item:condition.min }}{% endif %}<br>
+                                {% if condition.max %}Max: {{ condition.question.likerta|get_item:condition.max }}{% endif %}
+                            {% else %}
+                                {% if condition.min %}Less then: {{ condition.question.likerta|get_item:condition.min }}{% endif %}<br>
+                                {% if condition.max %}More then: {{ condition.question.likerta|get_item:condition.max }}{% endif %}
+                            {% endif %}
                         {% elif condition.question.answerType == QUESTION_TYPE.INTERVAL %}
-                            {% if condition.min %}Min: {{ condition.min }}{% endif %}<br>
-                            {% if condition.max %}Max: {{ condition.max }}{% endif %}
+                            {% if not condition.inverse %}
+                                {% if condition.min %}Min: {{ condition.min }}{% endif %}<br>
+                                {% if condition.max %}Max: {{ condition.max }}{% endif %}
+                            {% else %}
+                                {% if condition.min %}Less then: {{ condition.min }}{% endif %}<br>
+                                {% if condition.max %}More then: {{ condition.max }}{% endif %}
+                            {% endif %}
                         {% endif %}
                     </td>
                     <td class="text-center">

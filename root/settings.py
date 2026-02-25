@@ -175,4 +175,4 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # NewStarT Settings
-SCORE_UPDATE_DELAY = env('SCORE_UPDATE_DELAY')
+SCORE_UPDATE_DELAY = float(env('SCORE_UPDATE_DELAY'))

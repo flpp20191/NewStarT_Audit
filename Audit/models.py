@@ -200,6 +200,8 @@ class Answer(models.Model):
 
             stack = [(category, old_score_change[category], new_score_change[category]) for category in Category.objects.filter(type_question_set__question=self.question).distinct()]
             
+            print(stack)
+
             while stack:
                 category, old_score, new_score = stack.pop()
                 score, created = Score.objects.get_or_create(user=self.user, category=category)
@@ -260,16 +262,6 @@ class Answer(models.Model):
             else:
                 score[condition.type]["true"] += t
                 score[condition.type]["false"] += f
-            
-        if self.question.answerType == QUESTION_TYPE.INTERVAL:
-            try:
-                value = float(self.answer)
-                if self.question.condition.filter(min__lte=value, max__gte=value).exists():
-                    score["true"] += 1
-                else:
-                    score["false"] += 1
-            except ValueError:
-                pass
         return score
 
 @receiver(pre_delete, sender=Answer)

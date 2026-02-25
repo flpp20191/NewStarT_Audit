@@ -81,7 +81,7 @@ class Command(BaseCommand):
         CMD_RESET = "\033[0m"
 
         world = World()
-        ontology = owlready2.get_ontology(options['filepath']).load()
+        ontology = owlready2.get_ontology(options['filepath']).load(reload=True)
 
         QUESTION_TYPE_LIST = QUESTION_TYPE.choices
         OBJECT_PROPERTIES = list(ontology.object_properties())
@@ -256,7 +256,7 @@ class Command(BaseCommand):
 
             if LIKERT_CHOICE_SEPERATOR == None:
                 LIKERT_CHOICE_SEPERATOR = input("\nSeperator used for likert answer options, (line break = '\\n'), default '\\n')?")
-                if LIKERT_CHOICE_SEPERATOR == "": LIKERT_CHOICE_SEPERATOR = '\\n'
+                if LIKERT_CHOICE_SEPERATOR == "": LIKERT_CHOICE_SEPERATOR = '\n'
 
             if LIKERT_ANSWER_PROPERTY == None:
                 LIKERT_ANSWER_PROPERTY = set()
@@ -407,8 +407,8 @@ class Command(BaseCommand):
                 for restriction in question.is_a:
                     condition = Condition(question=question_obj)
                     if 'not' in part.__class__.__name__.lower():
-                            restriction = restriction.Class
-                            condition.inverse = True
+                        restriction = restriction.Class
+                        condition.inverse = True
                     if 'and' in restriction.__class__.__name__.lower():
                         for part in restriction.is_a:
                             if 'not' in part.__class__.__name__.lower():
@@ -417,22 +417,17 @@ class Command(BaseCommand):
                             if hasattr(part, "property") and part.property in HAS_CATEGORY:
                                 category_obj = Category.objects.get(iri=part.value.iri)
                                 condition.type = category_obj
-                                continue
                             if hasattr(part, "property") and part.property in MANDATORY_QUESTIONS:
                                 condition.required = bool(part.value)
-                                continue
                             if QUESTION_TYPE.LIKERTA == question_obj.answerType:
                                 if hasattr(part, "property") and part.property in LIKERT_ANSWER_PROPERTY:
                                     condition.min = LIKERT_ANSWERS.index(part.value)
                                     condition.max = LIKERT_ANSWER_RANGE[condition.min]
-                                    continue
                             if QUESTION_TYPE.INTERVAL == question_obj.answerType:
                                 if hasattr(part, "property") and part.property in MIN_RANGE:
                                     condition.min = float(part.value)
-                                    continue
                                 if hasattr(part, "property") and part.property in MAX_RANGE:
                                     condition.max = float(part.value)
-                                    continue
                     elif hasattr(restriction, "property") and restriction.property in HAS_CATEGORY:
                         category_obj = Category.objects.get(iri=restriction.value.iri)
                         condition.type = category_obj
@@ -545,7 +540,7 @@ class Command(BaseCommand):
                         INTERVAL["MAX"] = [x.iri for x in MAX_RANGE]
                     yaml.dump(data, configs, default_flow_style=False, indent=4)
                 self.stdout.write(self.style.SUCCESS("Made the cinfiguration file."))
-
+        
 
         self.stdout.write(self.style.SUCCESS(f"Categories created: {_created_categories}, updated: {_updated_categories}"))
         self.stdout.write(self.style.SUCCESS(f"Questions created: {_created_question}, updated: {_updated_question}"))
