@@ -148,7 +148,7 @@ class Dashboard(LoginRequiredMixin, View):
         }
         for score in scores:
             val = score.true_percentage + score.mandatoryTrue_percentage
-            chart["theta"].append(score.category.name + " " + str(val) + "%")
+            chart["theta"].append(score.category.name + " " + str(round(val, 2)) + "%")
             chart["r"].append(val)
         if len(scores) < 3:
             chart = None
@@ -163,9 +163,9 @@ class Dashboard(LoginRequiredMixin, View):
         }
         return render(request, self.template_name, context)
 
-class Recomendations(LoginRequiredMixin, View):
+class Overview(LoginRequiredMixin, View):
     model = Category
-    template_name = 'Audit/recommendations.html'
+    template_name = 'Audit/overview.html'
 
     def get(self, request, *args, **kwargs):
         if "pk" in kwargs:

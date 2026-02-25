@@ -82,6 +82,13 @@ class Condition(models.Model):
     inverse = models.BooleanField(default=False)
     required = models.BooleanField(default=False)
 
+    def check_in_interval(self, answer_value: float):
+        interval = True
+        if self.min != None: interval = False if self.min < answer_value else interval 
+        if self.max != None: interval = False if answer_value < self.max else interval
+        interval ^= not self.inverse
+        return interval
+
     def check_value(self, ansewer_value):
         try:
             if self.question.answerType == QUESTION_TYPE.YES_NO:
@@ -90,9 +97,9 @@ class Condition(models.Model):
                 elif (ansewer_value == "false") ^ self.inverse:
                     return False
             elif self.question.answerType == QUESTION_TYPE.LIKERTA:
-                return (self.min <= self.question.likerta.index(ansewer_value) <= self.max) ^ self.inverse
+                return self.check_in_interval(self.question.likerta.index(ansewer_value))
             elif self.question.answerType == QUESTION_TYPE.INTERVAL:
-                return (self.min <= float(ansewer_value) <= self.max) ^ self.inverse
+                return self.check_in_interval(float(ansewer_value))
         except ValueError: pass
         return False
 
@@ -199,8 +206,6 @@ class Answer(models.Model):
             new_score_change = self.get_score_change()
 
             stack = [(category, old_score_change[category], new_score_change[category]) for category in Category.objects.filter(type_question_set__question=self.question).distinct()]
-            
-            print(stack)
 
             while stack:
                 category, old_score, new_score = stack.pop()
@@ -229,6 +234,7 @@ class Answer(models.Model):
     def get_score_change(self) -> dict:
         score = defaultdict(dict)
 
+        condition: Condition
         for condition in self.question.condition.all():
             if not condition.type in score:
                 score[condition.type] = {"mandatoryTrue": 0, "mandatoryFalse": 0, "true": 0, "false": 0}
@@ -240,8 +246,7 @@ class Answer(models.Model):
                     f += 1
             elif self.question.answerType == QUESTION_TYPE.LIKERTA:
                 try:
-                    value = self.question.likerta.index(self.answer)
-                    if (condition.min <= value <= condition.max) ^ condition.inverse:
+                    if condition.check_in_interval(float(self.question.likerta.index(self.answer))):
                         t += 1
                     else:
                         f += 1
@@ -249,8 +254,7 @@ class Answer(models.Model):
                     pass
             elif self.question.answerType == QUESTION_TYPE.INTERVAL:
                 try:
-                    value = float(self.answer)
-                    if (condition.min <= value <= condition.max) ^ condition.inverse:
+                    if condition.check_in_interval(float(self.answer)):
                         t += 1
                     else:
                         f += 1

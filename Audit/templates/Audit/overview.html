@@ -9,15 +9,15 @@
 {% block content %}
 <div class="container-fluid mt-4 mb-5">
     <div class="d-flex align-items-center gap-3">
-        {% if back %}<a class="btn btn-outline-primary" href="{% if back.parent %}{% url 'audit:recommendations' pk=back.parent.pk %}{% else %}{% url 'audit:recommendations' %}{% endif %}">Back</a>{% endif %}
-        <h3 class="m-0 ml-3">Recomendations{% if back %} - {{back.name}}{% endif %}</h3>
+        {% if back %}<a class="btn btn-outline-primary" href="{% if back.parent %}{% url 'audit:overview' pk=back.parent.pk %}{% else %}{% url 'audit:overview' %}{% endif %}">Back</a>{% endif %}
+        <h3 class="m-0 ml-3">Overview{% if back %} - {{back.name}}{% endif %}</h3>
     </div>
     <div>
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
             <div class="collapse navbar-collapse">
                 <div class="navbar-nav">
                     {% for subcategory in subcategories %}
-                    <a href="{% url 'audit:recommendations' pk=subcategory.pk %}" class="nav-item nav-link nav-highlight text-dark border-right border-left" href="#">{{subcategory.name}}</a>
+                    <a href="{% url 'audit:overview' pk=subcategory.pk %}" class="nav-item nav-link nav-highlight text-dark border-right border-left" href="#">{{subcategory.name}}</a>
                     {% endfor %}
                 </div>
             </div>
@@ -47,7 +47,7 @@
     </div>
     {% if conditions %}
     <div class="d-flex flex-column mt-4">
-        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Recomendations</div>
+        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Overview</div>
         <table class="table">
             <thead>
                 <tr>
@@ -102,9 +102,9 @@
     </div>
     {% else %}
     <div class="d-flex flex-column mt-4">
-        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Recomendations</div>
+        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Overview</div>
         <div class="rounded-bottom bg-light w-100 p-2">
-            Select subcategory to see recomendations
+            Select subcategory to see overview for
         </div>
     </div>
     {% endif %}

@@ -12,7 +12,7 @@ urlpatterns = [
     path('question-form/<int:pk>/', views.AuditWizard.as_view(), name="question_form"),
     path('dashboard/', views.Dashboard.as_view(), name="dashboard"),
     path('dashboard/<int:pk>/', views.Dashboard.as_view(), name="dashboard"),
-    path('recommendations/', views.Recomendations.as_view(), name="recommendations"),
-    path('recommendations/<int:pk>/', views.Recomendations.as_view(), name="recommendations"),
+    path('overview/', views.Overview.as_view(), name="overview"),
+    path('overview/<int:pk>/', views.Overview.as_view(), name="overview"),
     path('audit-settings/', views.AuditSettings.as_view(), name="audit_settings"),
 ]

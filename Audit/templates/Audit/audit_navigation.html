@@ -31,9 +31,9 @@
             </a>
         </li>
         <li class="nav-item">
-            {% url 'audit:recommendations' as link %}
-            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:recommendations" %}active{% endif %}" aria-current="page">
-                Recommendations
+            {% url 'audit:overview' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:overview" %}active{% endif %}" aria-current="page">
+                Overview
             </a>
         </li>
         <hr>
