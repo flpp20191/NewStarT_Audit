@@ -15,10 +15,11 @@ Key Features and Concepts:
 - [Step 1: Clone the Repository](#step-1-clone-the-repository)
 - [Step 2: Create a Virtual Environment](#step-2-create-a-virtual-environment)
 - [Step 3: Install Dependencies](#step-3-install-dependencies)
-- [Step 4: Configure the Database and Environment Variables](#step-4-configure-the-database-and-environment-variables)
-- [Step 5: Run the Setup Command](#step-5-run-the-setup-command)
-- [Step 6: Upload the OWL file](#step-6-upload-the-owl-file)
-- [Step 7: Run the Development Server](#step-7-run-the-development-server)
+- [Step 4: Configure the Environment Variables](#step-4-configure-the-environment-variables)
+- [Step 5: Set up score update frequency](#step-5-set-up-score-update-frequency)
+- [Step 6: Run the Setup Command](#step-6-run-the-setup-command)
+- [Step 7: Upload the OWL file](#step-7-upload-the-owl-file)
+- [Step 8: Run the Development Server](#step-8-run-the-development-server)
 - [Additional Commands](#additional-commands)
 - [Deactivating the Virtual Environment](#deactivating-the-virtual-environment)
 - [Troubleshooting](#troubleshooting)
@@ -28,9 +29,9 @@ Key Features and Concepts:
 
 Before you begin, make sure you have the following installed on your system:
 
-- **Python 3.x**: [Download Python](https://www.python.org/downloads/)
+- **Python 3.10+**: [Download Python](https://www.python.org/downloads/)
+- **Django 5.2.11+**
 - **pip**: Python's package installer (included with Python 3.x)
-- (optional) **MySQL** : Ensure that MySQL is installed and running on your machine if you choose to use them.
 
 ## Step 1: Clone the Repository
 
@@ -71,13 +72,11 @@ pip install -r requirements.txt
 
 This command will install all necessary packages for the Django project.
 
-## Step 4: Configure the Database and Environment Variables
+## Step 4: Configure the Environment Variables
 
-The project can be configured to use SQLite or MySQL. By default, Django is configured to use SQLite, but you can switch to another database if needed.
+In this step you can also configure the DB you want to use.
 
 ### 1. **Copy `Example/.env.example` to `.env`**:
-
-In the root of your project directory, copy the `Example/.env.example` file to create a new `.env` file:
 
 #### On macOS/Linux:
 
@@ -110,34 +109,9 @@ SECRET_KEY=placeholder_generated_secret_key
 
 ### 3. **Configure the Database**:
 
-In your `.env` file, set the `DB_ENGINE` to select which database backend you want to use. The available options are `sqlite3`, `mysql`.
+This project uses sqlite as its default DB. If you want to change it, you can do that in your `.env` file, set the `DB_ENGINE` to select which database backend you want to use.
 
-#### **Default SQLite Setup**
-
-If you want to use SQLite (default setup), set the following in your `.env` file:
-
-```bash
-DB_ENGINE=sqlite3
-```
-
-The default SQLite configuration requires no additional setup. It will create a `db.sqlite3` file in the project directory.
-
-#### **Optional MySQL Setup**
-
-To use MySQL, set the following in your `.env` file:
-
-```bash
-DB_ENGINE=mysql
-DB_NAME=your_database_name
-DB_USER=your_database_user
-DB_PASSWORD=your_database_password
-DB_HOST=your_database_host
-DB_PORT=3306
-```
-
-Ensure that your MySQL server is up and running before proceeding.
-
-## Step 4: Set up score update frequency
+## Step 5: Set up score update frequency
 
 The `SCORE_UPDATE_DELAY` defines the minimum ammount of time someone has to wait, to recalculate their scores.
 
@@ -145,7 +119,7 @@ The `SCORE_UPDATE_DELAY` defines the minimum ammount of time someone has to wait
 SCORE_UPDATE_DELAY=300
 ```
 
-## Step 5: Run the Setup Command
+## Step 6: Run the Setup Command
 
 After configuring the environment variables, run the setup command to create the database, apply migrations, and populate initial data:
 
@@ -160,7 +134,7 @@ This command will:
 - Create the database (if it doesn't already exist).
 - Run all Django migrations to set up the database schema.
 
-## Step 6: Upload the OWL file
+## Step 7: Upload the OWL file
 
 After running the setup command, you can upload an OWL file to the system from example, or use your own ontology.
 To upload the Example file run this command.
@@ -200,7 +174,7 @@ This command will:
 - Update the DB only if all changes are valid.
 - (Optional) Generate configuration file to speed up OWL upload the next time.
 
-## Step 7: Run the Development Server
+## Step 8: Run the Development Server
 
 Once the setup is complete, start the Django development server:
 
