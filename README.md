@@ -29,6 +29,7 @@ Key Features and Concepts:
 ## Docker
 
 Docker version: https://hub.docker.com/r/flpp20191/new-start-audit
+
 The project is also available as a docker image
 
 ## Prerequisites
