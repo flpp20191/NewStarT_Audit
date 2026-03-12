@@ -3,3 +3,5 @@
 venv
 *.env
 private_media/owl_uploads/*.owl
+!root/.env
+!db.sqlite3
