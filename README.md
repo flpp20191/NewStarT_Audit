@@ -11,6 +11,7 @@ Key Features and Concepts:
 
 ## Table of Contents
 
+- [Docker](#docker)
 - [Prerequisites](#prerequisites)
 - [Step 1: Clone the Repository](#step-1-clone-the-repository)
 - [Step 2: Create a Virtual Environment](#step-2-create-a-virtual-environment)
@@ -24,6 +25,11 @@ Key Features and Concepts:
 - [Deactivating the Virtual Environment](#deactivating-the-virtual-environment)
 - [Troubleshooting](#troubleshooting)
 - [Contributing](#contributing)
+
+## Docker
+
+Docker version: https://hub.docker.com/r/flpp20191/new-start-audit
+The project is also available as a docker image
 
 ## Prerequisites
 
