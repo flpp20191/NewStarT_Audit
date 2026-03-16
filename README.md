@@ -144,6 +144,51 @@ This command will:
 ## Step 7: Upload the OWL file
 
 After running the setup command, you can upload an OWL file to the system from example, or use your own ontology.
+
+# Upload using UI
+
+1. To upload OWL file using UI, you need to log into a superuser account.
+2. Go to "Upload OWL file"
+3. Upload the OWL file
+4. Modify the upload YAML config file using IRIs from your data
+
+``` yml
+LANGUAGE: 'en' # Language tag
+HAS_CATEGORY:
+- https://newstart.rta.lv#hasCategory # Object property that point to category
+HAS_GROUP:
+- https://newstart.rta.lv#hasGroup # Grouping object property
+HAS_HINT_TEXT:
+- https://newstart.rta.lv#hasMesurement # Hint text
+QUESTION_TYPE:
+    INTERVAL: # If questions have interval answer types
+        MAX:
+        - https://newstart.rta.lv#hasMaxAllowedValue
+        MIN:
+        - https://newstart.rta.lv#hasMinAllowedValue
+    LIKERT: # If questions have likert answer types
+        LIKERT_ANSWER_PROPERTY:
+        - https://newstart.rta.lv#hasExpectedAnswer
+        LIKERT_CHOICES:
+        - https://newstart.rta.lv#hasAnswerOptions
+        SEPERATOR: '
+
+            '
+    MANDATORY: # Higlighted questions
+    - https://newstart.rta.lv#isMandatory
+    PROPERTIES: # Answer type indicator (Yes/No, Likert, Interval)
+    - https://newstart.rta.lv#hasAnswerType
+    TYPES: # Class objects that indicate an answer type
+        interval:
+        - https://newstart.rta.lv#interval
+        likert:
+        - https://newstart.rta.lv#likert
+        yes_no:
+        - https://newstart.rta.lv#yesno
+```
+
+# Upload using admin console
+
 To upload the Example file run this command.
 
 ```bash
