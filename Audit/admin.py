@@ -17,3 +17,6 @@ class ConditionAdmin(admin.ModelAdmin):
 
 admin.site.register(Answer)
 admin.site.register(Score)
+
+admin.site.register(OWL_Upload)
+admin.site.register(OWL_Upload_Configs)

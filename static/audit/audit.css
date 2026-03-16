@@ -1,3 +1,24 @@
+.form-step {
+    color: #c0c0c0;
+}
+.form-step .form-step-bubble {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #c0c0c0;
+    text-align: center;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+}
+.form-step.active {
+    color: #17a2b8;
+}
+.form-step.active .form-step-bubble {
+    background-color: #17a2b8;
+}
+
+
 .nav-highlight:hover {
     background-color: #ccd6e0!important;
 }
@@ -17,51 +38,6 @@
     justify-content: center;
 }
 
-@media (max-width: 575.98px) {
-    body {
-    font-size: 0.875rem;
-    }
-}
-.card {
-    margin-top: 20px;
-    border-radius: 0.9375rem;
-    box-shadow: 0 0.125rem 0.3125rem 0 rgba(0, 0, 0, 0.16),
-    0 0.125rem 0.625rem 0 rgba(0, 0, 0, 0.12);
-}
-.card-header {
-    cursor: pointer;
-    background-color: #4caf50;
-    color: white;
-    font-size: 1.25rem;
-    padding: 0.625rem 0.9375rem;
-    border-top-left-radius: 0.9375rem;
-    border-top-right-radius: 0.9375rem;
-}
-.card-header-notclickable {
-    background-color: #02979D;
-    color: white;
-    font-size: 1.25rem;
-    padding: 0.625rem 0.9375rem;
-    border-top-left-radius: 0.9375rem;
-    border-top-right-radius: 0.9375rem;
-}
-.modal-header {
-    background-color: #4caf50;
-    color: white;
-    font-size: 1.25rem;
-    padding: 0.625rem 0.9375rem;
-}
-.nested-table {
-    display: none;
-    padding: 0.625rem 0.9375rem;
-}
-.list-group-item {
-    font-size: 1rem;
-    transition: all 0.2s ease-in-out;
-}
-.list-group-item:hover {
-    background-color: #f8f9fa;
-}
 .progress {
     height: 1.25rem;
     margin-top: 0.625rem;
@@ -90,57 +66,6 @@ a.button {
 a.button:hover {
     background-color: #addbde;
 }
-
-
-
-.meta-pill {
-    border-radius: 100px;
-    background-color: #12e374;
-    font-weight: bold;
-    color: #0b8544;
-}
-.meta-pill.disabled {
-    opacity: 0.7;
-    cursor: default;
-    user-select: none;
-    background-color: #C1C1C1;
-    color: #828282;
-}
-.meta-pill::before {
-    content: "✓";
-}
-.meta-pill.disabled::before {
-    content: "✘";
-}
-
-
-
-#dashboard-nav {
-    background-color: #ace3e688;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-}
-#dashboard-nav a {
-    text-decoration: none;
-    color: #02979D;
-    font-weight: bold;
-    font-size: 1.1rem;
-    border: solid 1px #02979D;
-}
-#dashboard-nav a:hover {
-    background-color: #ace3e6;
-    color: #02979D;
-}
-#dashboard-nav a.selected {
-    background-color: #02979D;
-    color: white;
-}
-.audit-info-pages {
-    display: none;
-}
-
-
 
 .infoButton {
     color: #222222;
@@ -174,10 +99,6 @@ a.button:hover {
 }
 .infoButton span:hover {
     visibility: hidden;
-}
-
-.angularaxistick > text {
-    width: 300px;
 }
 
 .audit-type {

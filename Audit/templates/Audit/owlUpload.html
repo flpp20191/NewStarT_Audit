@@ -1,0 +1,56 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'audit\audit.css' %}">
+{% endblock %}
+
+{% if request.user.is_superuser %}
+    {% block content %}
+    <div class="container-fluid mt-4">
+        <h2 class="mb-4 text-center">OWL file upload</h2>
+        {% if file_upload_form %}
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <table class="table">
+                {{ file_upload_form.as_table }}
+            </table>
+            <button type="submit" class="btn btn-primary">Upload OWL file</button>
+            <table class="table mt-4">
+                {% for file in owl_files %}
+                <tr>
+                    <td>
+                        <a href="{% url 'audit:owl_upload' pk=file.pk %}">
+                            Upload again - {{ file.file.name }}
+                        </a>
+                    </td>
+                    <td><button type="submit" class="btn btn-primary" name="delete" value="{{ file.pk }}">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+        {% elif conf_upload_form %}
+        <form method="post">
+            {% csrf_token %}
+            {{ conf_upload_form.conf_file.label_tag }}
+            {{ conf_upload_form.conf_file }}
+            {{ conf_upload_form.conf_file.errors }}
+            <button type="submit" class="btn btn-primary mt-2">Upload OWL data</button>
+            <button type="submit" class="btn btn-outline-primary mt-2" name="action" value="save">Upload OWL dataand Save configurations</button>
+
+            <table class="table mt-4">
+                {% for conf in conf_files %}
+                <tr>
+                    <td>
+                        <a href="{% url 'audit:owl_upload' pk=pk conf=conf.pk %}">
+                            Upload again - {{ conf.uploaded_at|date:'%Y-%m-%d %H:%M:%S' }}
+                        </a>
+                    </td>
+                    <td><button type="submit" class="btn btn-primary" name="delete" value="{{ conf.pk }}">Delete</button></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+        {% endif %}
+    </div>
+    {% endblock %}
+{% endif %}

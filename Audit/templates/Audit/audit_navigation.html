@@ -36,17 +36,24 @@
                 Overview
             </a>
         </li>
-        <hr>
         {% endif %}
         {% if request.user.is_superuser %}
+        <hr>
+        <li class="nav-item">
+            {% url 'audit:owl_upload' as link %}
+            <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:owl_upload" %}active{% endif %}" aria-current="page">
+                Upload OWL file
+            </a>
+        </li>
+        {% endif %}
+        <hr>
+        {% if request.user.is_authenticated %}
         <li class="nav-item">
             {% url 'audit:audit_settings' as link %}
             <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:audit_settings" %}active{% endif %}" aria-current="page">
                 Settings
             </a>
         </li>
-        {% endif %}
-        {% if request.user.is_authenticated %}
         <li class="nav-item">
             {% url 'audit:logout' as link %}
             <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:logout" %}active{% endif %}" aria-current="page">

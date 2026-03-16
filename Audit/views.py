@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views import View
-from .models import UserCategory, Subthemes, Answer, QUESTION_TYPE, Score, Category, Question, Condition
-from .forms import UserCategoryForm
+from .models import UserCategory, Subthemes, Answer, QUESTION_TYPE, Score, Category, Question, Condition, OWL_Upload, OWL_Upload_Configs
+from .forms import UserCategoryForm, OWL_Upload_Form, CONF_Upload_Form
 from django.db import transaction
 from collections import defaultdict
 import json
@@ -11,7 +11,7 @@ from django.contrib import messages
 from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
-
+from owlready2 import *
 
 class AuditMain(View):
     template_name = 'Audit/audit_main.html'
@@ -95,7 +95,6 @@ class AuditWizard(LoginRequiredMixin, View):
             except Answer.DoesNotExist: answer = ""
             if not q.group in form_question_groups: form_question_groups[q.group] = {}
             form_question_groups[q.group][q] = answer
-            print(q.group)
         context = {
             "QUESTION_TYPE": QUESTION_TYPE,
             "subtheme": subtheme,
@@ -254,3 +253,83 @@ class AuditSettings(LoginRequiredMixin, View):
                 messages.add_message(request, messages.WARNING, f"You can only update scores every 5 minutes. Please wait before trying again. Time remaining: {int(settings.SCORE_UPDATE_DELAY - delay.total_seconds())} seconds.")
                 
         return redirect('audit:audit_settings')
+
+from .uploadOWL import uploadOWL
+class OWLUpload(LoginRequiredMixin, View):
+    template_name = 'Audit/owlUpload.html'
+    file_upload_form = OWL_Upload_Form
+    conf_upload_form = CONF_Upload_Form
+
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get(self, request, *args, **kwargs):
+        context = {}
+        if "pk" in kwargs:
+            context["pk"] = kwargs.get("pk")
+            if "conf" in kwargs:
+                config = OWL_Upload_Configs.objects.get(pk=kwargs.get("conf"))
+                context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": str(config.configs)})
+            else:
+                context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": """LANGUAGE: 'en'
+HAS_CATEGORY:
+- https://newstart.rta.lv#hasCategory
+HAS_GROUP:
+- https://newstart.rta.lv#hasSpecialization
+- https://newstart.rta.lv#hasGroup
+HAS_HINT_TEXT:
+- https://newstart.rta.lv#hasMesurement
+HAS_QUESTION_TYPE: true
+QUESTION_TYPE:
+    INTERVAL:
+        MAX:
+        - https://newstart.rta.lv#hasMaxAllowedValue
+        MIN:
+        - https://newstart.rta.lv#hasMinAllowedValue
+    LIKERT:
+        LIKERT_ANSWER_PROPERTY:
+        - https://newstart.rta.lv#hasExpectedAnswer
+        LIKERT_CHOICES:
+        - https://newstart.rta.lv#hasAnswerOptions
+        SEPERATOR: '
+
+'
+    MANDATORY:
+    - https://newstart.rta.lv#isMandatory
+    PROPERTIES:
+    - https://newstart.rta.lv#hasAnswerType
+    TYPES:
+        interval:
+        - https://newstart.rta.lv#interval
+        likert:
+        - https://newstart.rta.lv#likert
+        yes_no:
+        - https://newstart.rta.lv#yesno"""})
+            context["conf_files"] = OWL_Upload_Configs.objects.all()
+        else:
+            context["file_upload_form"] = self.file_upload_form()
+            context["owl_files"] = OWL_Upload.objects.all()
+        return render(request, self.template_name, context)
+    
+    def post(self, request, *args, **kwargs):
+        if "pk" in kwargs:
+            if "delete" in request.POST:
+                OWL_Upload_Configs.objects.get(pk=request.POST.get("delete")).delete()
+                return redirect('audit:owl_upload', pk=kwargs.get("pk"))
+            file = OWL_Upload.objects.get(pk=kwargs.get("pk"))
+            save = request.POST.get("action") == "save"
+            uploadOWL(request, file.file.path, conf=request.POST.get("conf_file"), make_config=save)
+            return redirect('audit:audit')
+        if "delete" in request.POST:
+            OWL_Upload.objects.get(pk=request.POST.get("delete")).delete()
+            return redirect('audit:owl_upload')
+        file = request.FILES.get('file')
+        if file:
+            owl_file = OWL_Upload(file=file)
+            owl_file.save()
+            messages.success(request, "OWL file uploaded and processed successfully.")
+            return redirect('audit:owl_upload', pk=owl_file.pk)
+        else:
+            messages.error(request, "No file uploaded. Please select an OWL file to upload.")
+            return redirect('audit:owl_upload')
+    

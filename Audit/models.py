@@ -4,6 +4,8 @@ from django.db import transaction
 from collections import defaultdict
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
+from django.core.validators import FileExtensionValidator
+from django.conf import settings
 
 # from Wizard.models import *
 from enum import Enum
@@ -312,3 +314,35 @@ def get_user_audit_tree(self: UserCategory) -> dict:
             _dict["subthemes"][subtheme.iri] = {}
             stack.append((_dict["subthemes"][subtheme.iri], subtheme))
     return audit_tree
+
+# ------------------------------------------------------
+# OWL Upload
+# ------------------------------------------------------
+
+from django.core.files.storage import FileSystemStorage
+from django.conf import settings
+class PrivateMediaStorage(FileSystemStorage):
+    def __init__(self, *args, **kwargs):
+        kwargs["location"] = settings.PRIVATE_MEDIA_ROOT
+        super().__init__(*args, **kwargs)
+
+class OWL_Upload(models.Model):
+    file = models.FileField(
+        storage=PrivateMediaStorage(),
+        upload_to='owl_uploads/',
+        validators=[
+            FileExtensionValidator(allowed_extensions=['rdf', 'xml', 'owl'])
+        ]
+    )
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.pk}. {self.file.name} - {self.uploaded_at.strftime('%Y-%m-%d %H:%M:%S')}"
+    
+    def delete(self, *args, **kwargs):
+        self.file.delete(save=False)
+        super().delete(*args, **kwargs)
+
+class OWL_Upload_Configs(models.Model):
+    configs = models.TextField()
+    uploaded_at = models.DateTimeField(auto_now_add=True)

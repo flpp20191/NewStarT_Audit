@@ -15,4 +15,9 @@ urlpatterns = [
     path('overview/', views.Overview.as_view(), name="overview"),
     path('overview/<int:pk>/', views.Overview.as_view(), name="overview"),
     path('audit-settings/', views.AuditSettings.as_view(), name="audit_settings"),
+
+    # Superuser-only views
+    path('owl-upload/', views.OWLUpload.as_view(), name="owl_upload"),
+    path('owl-upload/<int:pk>/', views.OWLUpload.as_view(), name="owl_upload"),
+    path('owl-upload/<int:pk>/<int:conf>/', views.OWLUpload.as_view(), name="owl_upload"),
 ]
