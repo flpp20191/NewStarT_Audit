@@ -1,4 +1,3 @@
-from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from Audit.models import QUESTION_TYPE, Category, Subthemes, Question, Condition, OWL_Upload_Configs
 from owlready2 import *
@@ -6,18 +5,6 @@ from collections import defaultdict
 from django.contrib import messages
 import yaml
 
-"""
-Usage:
-    python manage.py uploadOwl --filepath NewStarT.owl --language en
-    python manage.py uploadOwl --filepath NewStarT.owl --language en --conf conf.yml
-    python manage.py uploadOwl --filepath NewStarT.owl --language en --make_config --config_filename conf_output.yml
-    python manage.py uploadOwl --filepath Example/NewStarT.owl --language en --make_config --config_filename Example/conf_output.yml --conf Example/conf.yml
-
-This command is safe to run multiple times - it will:
-- Update relationships between data using existing IRIs
-- Make configurations for furure updates (IF IRIs DO NOT CHANGE) to make future updates faster and not require user input
-
-"""
 
 def get_label(entity, language="en"):
     for label in entity.label:
@@ -66,92 +53,101 @@ def uploadOWL(request, ontology_path, conf="", make_config=False):
         if ERROR_TEXT != "": ERROR_TEXT += "<br>"
         ERROR_TEXT += new_text
     
-    if CONFIGS:
-        LANGUAGE = CONFIGS["LANGUAGE"] if "LANGUAGE" in CONFIGS else "en"
-        HAS_CATEGORY = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_CATEGORY"]) if "HAS_CATEGORY" in CONFIGS else HAS_CATEGORY
-        HAS_GROUP = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_GROUP"]) if "HAS_GROUP" in CONFIGS else HAS_GROUP
-        HAS_HINT_TEXT = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_HINT_TEXT"]) if "HAS_HINT_TEXT" in CONFIGS else HAS_HINT_TEXT
-        HAS_QUESTION_TYPE = True
-        if "QUESTION_TYPE" in CONFIGS:
-            MANDATORY_QUESTIONS = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["MANDATORY"]) if "MANDATORY" in CONFIGS["QUESTION_TYPE"] else None
+    try:
+        if CONFIGS:
+            LANGUAGE = CONFIGS["LANGUAGE"] if "LANGUAGE" in CONFIGS else "en"
+            HAS_CATEGORY = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_CATEGORY"]) if "HAS_CATEGORY" in CONFIGS else HAS_CATEGORY
+            HAS_GROUP = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_GROUP"]) if "HAS_GROUP" in CONFIGS else HAS_GROUP
+            HAS_HINT_TEXT = set(ontology.search(iri=iri)[0] for iri in CONFIGS["HAS_HINT_TEXT"]) if "HAS_HINT_TEXT" in CONFIGS else HAS_HINT_TEXT
+            HAS_QUESTION_TYPE = True
+            if "QUESTION_TYPE" in CONFIGS:
+                MANDATORY_QUESTIONS = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["MANDATORY"]) if "MANDATORY" in CONFIGS["QUESTION_TYPE"] else None
 
-        if HAS_QUESTION_TYPE and "QUESTION_TYPE" in CONFIGS:
-            if "QUESTION_TYPE" in CONFIGS and "PROPERTIES" in CONFIGS["QUESTION_TYPE"]:
-                QUESTION_TYPE_PROPERIES = set()
-                for iri in CONFIGS["QUESTION_TYPE"]["PROPERTIES"]:
-                    QUESTION_TYPE_PROPERIES.add(ontology.search(iri=iri)[0])
+            if HAS_QUESTION_TYPE and "QUESTION_TYPE" in CONFIGS:
+                if "QUESTION_TYPE" in CONFIGS and "PROPERTIES" in CONFIGS["QUESTION_TYPE"]:
+                    QUESTION_TYPE_PROPERIES = set()
+                    for iri in CONFIGS["QUESTION_TYPE"]["PROPERTIES"]:
+                        QUESTION_TYPE_PROPERIES.add(ontology.search(iri=iri)[0])
+                else:
+                    QUESTION_TYPE_PROPERIES = None
+                
+                if "TYPES" in CONFIGS["QUESTION_TYPE"]:
+                    ANSWER_TYPE_MAP = {}
+                    for x in CONFIGS["QUESTION_TYPE"]["TYPES"]:
+                        USED_ANSWER_TYPES.add(x)
+                        for iri in CONFIGS["QUESTION_TYPE"]["TYPES"][x]:
+                            ANSWER_TYPE_MAP[ontology.search(iri=iri)[0]] = x
             else:
-                QUESTION_TYPE_PROPERIES = None
+                DEFAULT_ANSWER_TYPE = CONFIGS["DEFAULT_ANSWER_TYPE"] if "DEFAULT_ANSWER_TYPE" in CONFIGS else DEFAULT_ANSWER_TYPE
+                USED_ANSWER_TYPES.add(DEFAULT_ANSWER_TYPE)
             
-            if "TYPES" in CONFIGS["QUESTION_TYPE"]:
-                ANSWER_TYPE_MAP = {}
-                for x in CONFIGS["QUESTION_TYPE"]["TYPES"]:
-                    USED_ANSWER_TYPES.add(x)
-                    for iri in CONFIGS["QUESTION_TYPE"]["TYPES"][x]:
-                        ANSWER_TYPE_MAP[ontology.search(iri=iri)[0]] = x
-        else:
-            DEFAULT_ANSWER_TYPE = CONFIGS["DEFAULT_ANSWER_TYPE"] if "DEFAULT_ANSWER_TYPE" in CONFIGS else DEFAULT_ANSWER_TYPE
-            USED_ANSWER_TYPES.add(DEFAULT_ANSWER_TYPE)
-        
-        if QUESTION_TYPE.LIKERTA in USED_ANSWER_TYPES and "QUESTION_TYPE" in CONFIGS and "LIKERT" in CONFIGS["QUESTION_TYPE"]:
-            LIKERT_CHOICES = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["LIKERT"]["LIKERT_CHOICES"]) if "LIKERT_CHOICES" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
-            LIKERT_ANSWER_PROPERTY = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["LIKERT"]["LIKERT_ANSWER_PROPERTY"]) if "LIKERT_ANSWER_PROPERTY" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
-            LIKERT_CHOICE_SEPERATOR = CONFIGS["QUESTION_TYPE"]["LIKERT"]["SEPERATOR"] if "SEPERATOR" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
-            LIKERT_CHOICE_SEPERATOR = LIKERT_CHOICE_SEPERATOR.encode("utf-8").decode("unicode_escape")
-        if QUESTION_TYPE.INTERVAL in USED_ANSWER_TYPES and "QUESTION_TYPE" in CONFIGS and "INTERVAL" in CONFIGS["QUESTION_TYPE"]:
-            MAX_RANGE = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["INTERVAL"]["MAX"]) if "MAX" in CONFIGS["QUESTION_TYPE"]["INTERVAL"] else MAX_RANGE
-            MIN_RANGE = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["INTERVAL"]["MIN"]) if "MIN" in CONFIGS["QUESTION_TYPE"]["INTERVAL"] else MIN_RANGE
-    
-    CATEGORY_SET = set()
-    for cls in ontology.classes():
-        for restriction in cls.is_a:
-            if 'not' in restriction.__class__.__name__.lower():
-                restriction = restriction.Class
-            if 'and' in restriction.__class__.__name__.lower():
-                for part in restriction.is_a:
-                    if 'not' in part.__class__.__name__.lower():
-                        part = part.Class
-                    if hasattr(part, "property") and part.property in HAS_CATEGORY:
-                        CATEGORY_SET.add(part.value)
-                continue
-            elif hasattr(restriction, "property") and restriction.property in HAS_CATEGORY:
-                CATEGORY_SET.add(restriction.value)
+            if QUESTION_TYPE.LIKERTA in USED_ANSWER_TYPES and "QUESTION_TYPE" in CONFIGS and "LIKERT" in CONFIGS["QUESTION_TYPE"]:
+                LIKERT_CHOICES = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["LIKERT"]["LIKERT_CHOICES"]) if "LIKERT_CHOICES" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
+                LIKERT_ANSWER_PROPERTY = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["LIKERT"]["LIKERT_ANSWER_PROPERTY"]) if "LIKERT_ANSWER_PROPERTY" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
+                LIKERT_CHOICE_SEPERATOR = CONFIGS["QUESTION_TYPE"]["LIKERT"]["SEPERATOR"] if "SEPERATOR" in CONFIGS["QUESTION_TYPE"]["LIKERT"] else None
+                LIKERT_CHOICE_SEPERATOR = LIKERT_CHOICE_SEPERATOR.encode("utf-8").decode("unicode_escape")
+            if QUESTION_TYPE.INTERVAL in USED_ANSWER_TYPES and "QUESTION_TYPE" in CONFIGS and "INTERVAL" in CONFIGS["QUESTION_TYPE"]:
+                MAX_RANGE = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["INTERVAL"]["MAX"]) if "MAX" in CONFIGS["QUESTION_TYPE"]["INTERVAL"] else MAX_RANGE
+                MIN_RANGE = set(ontology.search(iri=iri)[0] for iri in CONFIGS["QUESTION_TYPE"]["INTERVAL"]["MIN"]) if "MIN" in CONFIGS["QUESTION_TYPE"]["INTERVAL"] else MIN_RANGE
+    except:
+        extend_error_text("Error in configuration. Make sure the configuration is valid and matches the ontology.")
+        SUCCESS = False
 
-    stack = list(CATEGORY_SET)
-    while stack:
-        val = stack.pop()
-        for parent in val.is_a:
-            if not parent in CATEGORY_SET:
-                CATEGORY_SET.add(parent)
-                stack.append(parent)
-    CATEGORY_SET.remove(Thing)
+    try:
+        if SUCCESS:
+            CATEGORY_SET = set()
+            for cls in ontology.classes():
+                for restriction in cls.is_a:
+                    if 'not' in restriction.__class__.__name__.lower():
+                        restriction = restriction.Class
+                    if 'and' in restriction.__class__.__name__.lower():
+                        for part in restriction.is_a:
+                            if 'not' in part.__class__.__name__.lower():
+                                part = part.Class
+                            if hasattr(part, "property") and part.property in HAS_CATEGORY:
+                                CATEGORY_SET.add(part.value)
+                        continue
+                    elif hasattr(restriction, "property") and restriction.property in HAS_CATEGORY:
+                        CATEGORY_SET.add(restriction.value)
 
-    CATEGORY_PARENT_MAP = {}
-    for category_entity in CATEGORY_SET:
-        for superclass in category_entity.is_a:
-            if superclass in CATEGORY_SET:
-                CATEGORY_PARENT_MAP[category_entity] = superclass
+            stack = list(CATEGORY_SET)
+            while stack:
+                val = stack.pop()
+                for parent in val.is_a:
+                    if not parent in CATEGORY_SET:
+                        CATEGORY_SET.add(parent)
+                        stack.append(parent)
+            CATEGORY_SET.remove(Thing)
 
-    if HAS_QUESTION_TYPE:
-        QUESTION_SET = set()
+            CATEGORY_PARENT_MAP = {}
+            for category_entity in CATEGORY_SET:
+                for superclass in category_entity.is_a:
+                    if superclass in CATEGORY_SET:
+                        CATEGORY_PARENT_MAP[category_entity] = superclass
 
-        uniqueAnswerTypes = set()
-        for cls in ontology.classes():
-            for restriction in cls.is_a:
-                if hasattr(restriction, "property") and restriction.property in QUESTION_TYPE_PROPERIES:
-                    uniqueAnswerTypes.add(restriction.value)
-                    QUESTION_SET.add(cls)
-    else:
-        QUESTION_SET = set()
-        for cls in ontology.classes():
-            for restriction in cls.is_a:
-                if 'and' in restriction.__class__.__name__.lower():
-                    for part in restriction.is_a:
-                        if hasattr(part, "property") and part.property in HAS_CATEGORY:
+            if HAS_QUESTION_TYPE:
+                QUESTION_SET = set()
+
+                uniqueAnswerTypes = set()
+                for cls in ontology.classes():
+                    for restriction in cls.is_a:
+                        if hasattr(restriction, "property") and restriction.property in QUESTION_TYPE_PROPERIES:
+                            uniqueAnswerTypes.add(restriction.value)
                             QUESTION_SET.add(cls)
-                    continue
-                elif hasattr(restriction, "property") and restriction.property in HAS_CATEGORY:
-                    QUESTION_SET.add(cls)
+            else:
+                QUESTION_SET = set()
+                for cls in ontology.classes():
+                    for restriction in cls.is_a:
+                        if 'and' in restriction.__class__.__name__.lower():
+                            for part in restriction.is_a:
+                                if hasattr(part, "property") and part.property in HAS_CATEGORY:
+                                    QUESTION_SET.add(cls)
+                            continue
+                        elif hasattr(restriction, "property") and restriction.property in HAS_CATEGORY:
+                            QUESTION_SET.add(cls)
+    except:
+        extend_error_text("Error processing categories. Make sure categories are valid.")
+        SUCCESS = False
 
     _created_categories, _updated_categories = 0, 0
     _created_question, _updated_question = 0, 0
@@ -159,6 +155,7 @@ def uploadOWL(request, ontology_path, conf="", make_config=False):
     _created_subthemes, _updated_subthemes = 0, 0
 
     try:
+        if not SUCCESS: raise ValueError("Abort transaction")
         with transaction.atomic():
             try:
                 for category_entity in CATEGORY_SET:
@@ -344,9 +341,6 @@ def uploadOWL(request, ontology_path, conf="", make_config=False):
                 extend_error_text("Error creating subthemes. Make sure the ontology is valid and matches the configuration.")
                 SUCCESS = False
                 raise ValueError("Abort transaction")
-        
-            if make_config:
-                OWL_Upload_Configs(configs=CONFIGS).save()
     except ValueError:
         pass
 

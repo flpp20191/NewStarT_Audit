@@ -276,38 +276,36 @@ class OWLUpload(LoginRequiredMixin, View):
             else:
                 context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": """LANGUAGE: 'en'
 HAS_CATEGORY:
-- https://newstart.rta.lv#hasCategory
+- https://template.com#hasCategory
 HAS_GROUP:
-- https://newstart.rta.lv#hasSpecialization
-- https://newstart.rta.lv#hasGroup
+- https://template.com#hasGroup
 HAS_HINT_TEXT:
-- https://newstart.rta.lv#hasMesurement
-HAS_QUESTION_TYPE: true
+- https://template.com#hasMesurement
 QUESTION_TYPE:
     INTERVAL:
         MAX:
-        - https://newstart.rta.lv#hasMaxAllowedValue
+        - https://template.com#hasMaxAllowedValue
         MIN:
-        - https://newstart.rta.lv#hasMinAllowedValue
+        - https://template.com#hasMinAllowedValue
     LIKERT:
         LIKERT_ANSWER_PROPERTY:
-        - https://newstart.rta.lv#hasExpectedAnswer
+        - https://template.com#hasExpectedAnswer
         LIKERT_CHOICES:
-        - https://newstart.rta.lv#hasAnswerOptions
+        - https://template.com#hasAnswerOptions
         SEPERATOR: '
 
-'
+            '
     MANDATORY:
-    - https://newstart.rta.lv#isMandatory
+    - https://template.com#isMandatory
     PROPERTIES:
-    - https://newstart.rta.lv#hasAnswerType
+    - https://template.com#hasAnswerType
     TYPES:
         interval:
-        - https://newstart.rta.lv#interval
+        - https://template.com#interval
         likert:
-        - https://newstart.rta.lv#likert
+        - https://template.com#likert
         yes_no:
-        - https://newstart.rta.lv#yesno"""})
+        - https://template.com#yesno"""})
             context["conf_files"] = OWL_Upload_Configs.objects.all()
         else:
             context["file_upload_form"] = self.file_upload_form()
@@ -318,10 +316,19 @@ QUESTION_TYPE:
         if "pk" in kwargs:
             if "delete" in request.POST:
                 OWL_Upload_Configs.objects.get(pk=request.POST.get("delete")).delete()
+                request.session["owl_configs"] = request.POST.get("conf_file")
                 return redirect('audit:owl_upload', pk=kwargs.get("pk"))
             file = OWL_Upload.objects.get(pk=kwargs.get("pk"))
             save = request.POST.get("action") == "save"
-            if uploadOWL(request, file.file.path, conf=request.POST.get("conf_file"), make_config=save):
+            owl_upload_result = False
+            
+            try:
+                owl_upload_result = uploadOWL(request, file.file.path, conf=request.POST.get("conf_file"))
+            except Exception as e:
+                messages.error(request, f"Error processing OWL file: {str(e)}")
+
+            if owl_upload_result:
+                if save: OWL_Upload_Configs.objects.create(configs=request.POST.get("conf_file"))
                 return redirect('audit:audit')
             else:
                 request.session["owl_configs"] = request.POST.get("conf_file")
