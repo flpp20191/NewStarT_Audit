@@ -22,11 +22,6 @@ class Command(BaseCommand):
         db_engine = env('DB_ENGINE', default='sqlite3').strip()
         raw_db_name = env('DB_NAME', default='').strip()
         db_name = raw_db_name if raw_db_name not in ("", "placeholder_db_name") else "db"
-        db_host = env('DB_HOST', default='not_set')
-        db_port = env('DB_PORT', default='3306')
-        db_user = env('DB_USER', default='not_set')
-        db_user = env('SCORE_UPDATE_DELAY', default='300')
-        db_password = env('DB_PASSWORD', default='not_set')
         
         # Print to see if the environment values are correct
         
@@ -54,7 +49,7 @@ class Command(BaseCommand):
             if os.path.exists(owl_path):
                 with open(owl_path, "rb") as f:
                     obj = OWL_Upload.objects.create()
-                    obj.file.save("NewStarT.owl", File(f), save=True)
+                    obj.file.save(owl_path, File(f), save=True)
 
                 self.stdout.write("OWL file saved")
 
