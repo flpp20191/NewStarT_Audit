@@ -1,0 +1,93 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+
+{% block load %}
+<script src="{% static 'audit\plotly-3.0.0.min.js' %}"></script>
+<script src="{% static 'audit\audit.js' %}"></script>
+<link rel="stylesheet" href="{% static 'audit\audit.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="container-fluid mt-4 mb-5">
+    <div class="d-flex align-items-center gap-3">
+        {% if back %}<a class="btn btn-outline-primary" href="{% if back.parent %}{% url 'audit:dashboard' pk=back.parent.pk %}{% else %}{% url 'audit:dashboard' %}{% endif %}">Back</a>{% endif %}
+        <h3 class="m-0 ml-3">Dashboard{% if back %} - {{back.name}}{% endif %}</h3>
+    </div>
+    <div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="collapse navbar-collapse">
+                <div class="navbar-nav">
+                    {% for subcategory in subcategories %}
+                    <a href="{% url 'audit:dashboard' pk=subcategory.pk %}" class="nav-item nav-link nav-highlight text-dark border-right border-left" href="#">{{subcategory.name}}</a>
+                    {% endfor %}
+                </div>
+            </div>
+        </nav>
+    </div>
+    <div class="d-flex flex-column gap-0">
+        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Legend</div>
+        <div class="rounded-bottom bg-light p-2">
+            <table>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <font class="color-bf9b30">★</font> - Selected category <span class="infoButton">ⓘ<span>Indicates user selected category</span></span>
+                    </td>
+                </tr>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <span class="progress-pill bg-color-02979D"></span> - Correct required questions <span class="infoButton">ⓘ<span>Answers match required questions for this category</span></span>
+                    </td>
+                </tr>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <span class="progress-pill bg-color-8f140c"></span> - Incorrect required questions <span class="infoButton">ⓘ<span>Answers don't match required questions for this category</span></span>
+                    </td>
+                </tr>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <span class="progress-pill bg-color-00cc7a"></span> - Correct questions <span class="infoButton">ⓘ<span>Answers match questions for this category</span></span>
+                    </td>
+                </tr>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <span class="progress-pill bg-color-ff1200"></span> - Incorrect questions <span class="infoButton">ⓘ<span>Answers don't match questions for this category</span></span>
+                    </td>
+                </tr>
+                <tr class="d-block d-sm-inline-flex me-2">
+                    <td class="d-flex align-items-center">
+                        <span class="progress-pill bg-color-e9ecef"></span> - Unanswered <span class="infoButton">ⓘ<span style="margin-left: -170px">Questions have no answer associated with them</span></span>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    {% if chart %}
+    <div class="d-flex flex-column mt-4 shadow-sm">
+        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Categories</div>
+        <div class="rounded-bottom bg-light w-100" id="chart" data-chart='{{chart|safe}}' style="overflow: hidden"></div>
+    </div>
+    {% endif %}
+    <div class="d-flex flex-column mt-4">
+        <div class="h5 rounded-top bg-secondary p-2 mb-0 text-light">Detailed category view</div>
+        <div class="rounded-bottom bg-light w-100 p-2">
+            {% for score in scores %}
+            {% if score.total > 0 %}
+            <div class="mx-2 mb-3">
+                <div class="h6 {% if score.category in request.user.usercategory.category_set %}audit-type user-selected color-bf9b30-dark{% endif %}">{{score.category.name}}</div>
+                <div>
+                    <div class="progress">
+                        {% if score.mandatoryTrue_percentage %}<div class="progress-bar bg-color-02979D" role="progressbar" style="width: {{score.mandatoryTrue_percentage}}%" aria-valuenow="{{score.mandatoryTrue_percentage}}" aria-valuemin="0" aria-valuemax="100">{{score.mandatoryTrue_percentage}}%</div>{% endif %}
+                        {% if score.mandatoryFalse_percentage %}<div class="progress-bar bg-color-8f140c" role="progressbar" style="width: {{score.mandatoryFalse_percentage}}%" aria-valuenow="{{score.mandatoryFalse_percentage}}" aria-valuemin="0" aria-valuemax="100">{{score.mandatoryFalse_percentage}}%</div>{% endif %}
+                        {% if score.true_percentage %}<div class="progress-bar bg-color-00cc7a" role="progressbar" style="width: {{score.true_percentage}}%" aria-valuenow="{{score.true_percentage}}" aria-valuemin="0" aria-valuemax="100">{{score.true_percentage}}%</div>{% endif %}
+                        {% if score.false_percentage %}<div class="progress-bar bg-color-ff1200" role="progressbar" style="width: {{score.false_percentage}}%" aria-valuenow="{{score.false_percentage}}" aria-valuemin="0" aria-valuemax="100">{{score.false_percentage}}%</div>{% endif %}
+                        {% if score.unanswered_percentage %}<div class="progress-bar bg-color-e9ecef text-dark" role="progressbar" style="width: {{score.unanswered_percentage}}%" aria-valuenow="{{score.unanswered_percentage}}" aria-valuemin="0" aria-valuemax="100">{{score.unanswered_percentage}}%</div>{% endif %}
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}

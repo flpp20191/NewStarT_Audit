@@ -1,0 +1,29 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid mt-4">
+        <div class="container my-4">
+            <h4 class="d-flex align-items-center">
+                Settings
+            </h4>
+        </div>
+        <form method="post">
+            {% csrf_token %}
+            <table class="table table-striped">
+                <tr>
+                    <th>Recalculate score on answer change</th>
+                    <td class="text-right">
+                        <button type="submit" name="action" class="btn btn-outline-primary" value="update_score" style="width: 300px">Update score</button>
+                    </td>
+                </tr>
+                <tr>
+                    <th>Delete all answers</th>
+                    <td class="text-right">
+                        <button type="submit" name="action" class="btn btn-outline-primary" value="delete_answers" style="width: 300px">Delete all answers</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+{% endblock %}

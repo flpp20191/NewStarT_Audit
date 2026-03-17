@@ -1,0 +1,23 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container-fluid mt-4">
+        {% if auditTree %}
+        <div class="container my-4">
+            <h5 class="d-flex align-items-center">
+                Selected category: {% for category in request.user.usercategory.category.all %}{% if forloop.counter < 1%}{% endif %}{{category}}{% endfor %}
+            </h5>
+        </div>
+        <div class="auditTree ms-4">
+            {% include 'Audit/partials/_subtheme.html' with subthemes=auditTree depth=0 %}
+        </div>
+        {% else %}
+        <div class="container my-4">
+            <h5 class="d-flex align-items-center">
+                No category has been selected. <a class="ml-2" href="{% url 'audit:user_category_form' %}">Select category.</a>
+            </h5>
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}

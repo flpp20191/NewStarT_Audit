@@ -1,0 +1,32 @@
+LANGUAGE: 'en'
+HAS_CATEGORY:
+- https://template.com#hasCategory
+HAS_GROUP:
+- https://template.com#hasGroup
+HAS_HINT_TEXT:
+- https://template.com#hasMesurement
+QUESTION_TYPE:
+    INTERVAL:
+        MAX:
+        - https://template.com#hasMaxAllowedValue
+        MIN:
+        - https://template.com#hasMinAllowedValue
+    LIKERT:
+        LIKERT_ANSWER_PROPERTY:
+        - https://template.com#hasExpectedAnswer
+        LIKERT_CHOICES:
+        - https://template.com#hasAnswerOptions
+        SEPERATOR: '
+
+            '
+    MANDATORY:
+    - https://template.com#isMandatory
+    PROPERTIES:
+    - https://template.com#hasAnswerType
+    TYPES:
+        interval:
+        - https://template.com#interval
+        likert:
+        - https://template.com#likert
+        yes_no:
+        - https://template.com#yesno

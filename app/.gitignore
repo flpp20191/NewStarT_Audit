@@ -1,0 +1,5 @@
+*.sqlite3
+**/__pycache__/
+venv
+*.env
+private_media/owl_uploads/*.owl
