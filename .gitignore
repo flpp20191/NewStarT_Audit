@@ -2,6 +2,5 @@
 **/__pycache__/
 venv
 *.env
-private_media/owl_uploads/*.owl
-!root/.env
-!db.sqlite3
+app/private_media/owl_uploads/*.owl
+!app/root/.env
