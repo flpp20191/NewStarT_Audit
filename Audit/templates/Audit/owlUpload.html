@@ -42,7 +42,7 @@
                 <tr>
                     <td>
                         <a href="{% url 'audit:owl_upload' pk=pk conf=conf.pk %}">
-                            Upload again - {{ conf.uploaded_at|date:'%Y-%m-%d %H:%M:%S' }}
+                            Upload again - {{ conf.uploaded_at|date:"Y-m-d H:i:s" }}
                         </a>
                     </td>
                     <td><button type="submit" class="btn btn-primary" name="delete" value="{{ conf.pk }}">Delete</button></td>

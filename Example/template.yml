@@ -1,33 +1,32 @@
 LANGUAGE: 'en'
 HAS_CATEGORY:
-- https://newstart.rta.lv#hasCategory
+- https://template.com#hasCategory
 HAS_GROUP:
-- https://newstart.rta.lv#hasGroup
+- https://template.com#hasGroup
 HAS_HINT_TEXT:
-- https://newstart.rta.lv#hasMesurement
-HAS_QUESTION_TYPE: true
+- https://template.com#hasMesurement
 QUESTION_TYPE:
     INTERVAL:
         MAX:
-        - https://newstart.rta.lv#hasMaxAllowedValue
+        - https://template.com#hasMaxAllowedValue
         MIN:
-        - https://newstart.rta.lv#hasMinAllowedValue
+        - https://template.com#hasMinAllowedValue
     LIKERT:
         LIKERT_ANSWER_PROPERTY:
-        - https://newstart.rta.lv#hasExpectedAnswer
+        - https://template.com#hasExpectedAnswer
         LIKERT_CHOICES:
-        - https://newstart.rta.lv#hasAnswerOptions
+        - https://template.com#hasAnswerOptions
         SEPERATOR: '
 
             '
     MANDATORY:
-    - https://newstart.rta.lv#isMandatory
+    - https://template.com#isMandatory
     PROPERTIES:
-    - https://newstart.rta.lv#hasAnswerType
+    - https://template.com#hasAnswerType
     TYPES:
         interval:
-        - https://newstart.rta.lv#interval
+        - https://template.com#interval
         likert:
-        - https://newstart.rta.lv#likert
+        - https://template.com#likert
         yes_no:
-        - https://newstart.rta.lv#yesno
+        - https://template.com#yesno

@@ -27,9 +27,9 @@
                 {% if messages %}
                 {% for message in messages %}
                 <dd class="message" id="message_{{forloop.counter}}">
-                    <div class="alert alert-{{ message.tags }} m-0 p-2 d-flex align-items-center w-100">
+                    <div class="alert alert-{% if message.tags == "error" %}danger{% else %}{{ message.tags }}{% endif %} m-0 p-2 d-flex align-items-center w-100">
                         <a href="#" class="close close-{{ message.tags }} mx-3" data-dismiss="alert" aria-label="close" value="message_{{forloop.counter}}">X</a>
-                        <strong>{{ message }}</strong>
+                        <strong>{{ message|safe }}</strong>
                     </div>
                 </dd>
                 {% endfor %}

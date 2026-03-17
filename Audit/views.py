@@ -267,7 +267,10 @@ class OWLUpload(LoginRequiredMixin, View):
         context = {}
         if "pk" in kwargs:
             context["pk"] = kwargs.get("pk")
-            if "conf" in kwargs:
+            if "owl_configs" in request.session:
+                context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": request.session.get("owl_configs")})
+                del request.session["owl_configs"]
+            elif "conf" in kwargs:
                 config = OWL_Upload_Configs.objects.get(pk=kwargs.get("conf"))
                 context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": str(config.configs)})
             else:
@@ -318,8 +321,11 @@ QUESTION_TYPE:
                 return redirect('audit:owl_upload', pk=kwargs.get("pk"))
             file = OWL_Upload.objects.get(pk=kwargs.get("pk"))
             save = request.POST.get("action") == "save"
-            uploadOWL(request, file.file.path, conf=request.POST.get("conf_file"), make_config=save)
-            return redirect('audit:audit')
+            if uploadOWL(request, file.file.path, conf=request.POST.get("conf_file"), make_config=save):
+                return redirect('audit:audit')
+            else:
+                request.session["owl_configs"] = request.POST.get("conf_file")
+                return redirect('audit:owl_upload', pk=kwargs.get("pk"))
         if "delete" in request.POST:
             OWL_Upload.objects.get(pk=request.POST.get("delete")).delete()
             return redirect('audit:owl_upload')

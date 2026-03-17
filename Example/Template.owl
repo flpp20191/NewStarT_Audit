@@ -1,13 +1,14 @@
 <?xml version="1.0"?>
 <rdf:RDF xmlns="https://newstart.rta.lv#"
      xml:base="https://newstart.rta.lv"
+     xmlns:template="https://template.com#"
      xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
      xmlns:owl="http://www.w3.org/2002/07/owl#"
      xmlns:xml="http://www.w3.org/XML/1998/namespace"
      xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
      xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
-    <owl:Ontology rdf:about="https://newstart.rta.lv">
-        <owl:versionIRI rdf:resource="https://newstart.rta.lv/1.8.1"/>
+    <owl:Ontology rdf:about="https://template.com">
+        <owl:versionIRI rdf:resource="https://template.com/0.0.0"/>
     </owl:Ontology>
     
 
@@ -32,9 +33,9 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasDescription -->
+    <!-- https://template.com#hasDescription -->
 
-    <owl:AnnotationProperty rdf:about="https://newstart.rta.lv#hasDescription">
+    <owl:AnnotationProperty rdf:about="https://template.com#hasDescription">
         <rdfs:label xml:lang="lv">Apraksts</rdfs:label>
         <rdfs:label xml:lang="en">Description</rdfs:label>
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#comment"/>
@@ -53,20 +54,20 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasAnswerType -->
+    <!-- https://template.com#hasAnswerType -->
 
-    <owl:ObjectProperty rdf:about="https://newstart.rta.lv#hasAnswerType">
+    <owl:ObjectProperty rdf:about="https://template.com#hasAnswerType">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
-        <rdfs:range rdf:resource="https://newstart.rta.lv#typeOfQuestion"/>
+        <rdfs:range rdf:resource="https://template.com#typeOfQuestion"/>
         <rdfs:label xml:lang="en">Expected answer type</rdfs:label>
         <rdfs:label xml:lang="lv">Sagaidāmās atbildes veids</rdfs:label>
     </owl:ObjectProperty>
     
 
 
-    <!-- https://newstart.rta.lv#hasCategory -->
+    <!-- https://template.com#hasCategory -->
 
-    <owl:ObjectProperty rdf:about="https://newstart.rta.lv#hasCategory">
+    <owl:ObjectProperty rdf:about="https://template.com#hasCategory">
         <rdfs:comment xml:lang="en">Questions can have multiple &apos;hasCategory&apos; relations</rdfs:comment>
         <rdfs:label xml:lang="en">Has category</rdfs:label>
         <rdfs:label xml:lang="lv">Ir kategorija</rdfs:label>
@@ -74,18 +75,18 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasGroup -->
+    <!-- https://template.com#hasGroup -->
 
-    <owl:ObjectProperty rdf:about="https://newstart.rta.lv#hasGroup">
+    <owl:ObjectProperty rdf:about="https://template.com#hasGroup">
         <rdfs:label xml:lang="en">Has group</rdfs:label>
         <rdfs:label xml:lang="lv">Ir īpašība</rdfs:label>
     </owl:ObjectProperty>
     
 
 
-    <!-- https://newstart.rta.lv#hasMesurement -->
+    <!-- https://template.com#hasMesurement -->
 
-    <owl:ObjectProperty rdf:about="https://newstart.rta.lv#hasMesurement">
+    <owl:ObjectProperty rdf:about="https://template.com#hasMesurement">
         <rdfs:label xml:lang="en">Has mesurement</rdfs:label>
         <rdfs:label xml:lang="lv">Ir mērvienība</rdfs:label>
     </owl:ObjectProperty>
@@ -103,18 +104,18 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasAnswerOptions -->
+    <!-- https://template.com#hasAnswerOptions -->
 
-    <owl:DatatypeProperty rdf:about="https://newstart.rta.lv#hasAnswerOptions">
+    <owl:DatatypeProperty rdf:about="https://template.com#hasAnswerOptions">
         <rdfs:label xml:lang="en">Has answer option</rdfs:label>
         <rdfs:label xml:lang="lv">Ir atbildes variants</rdfs:label>
     </owl:DatatypeProperty>
     
 
 
-    <!-- https://newstart.rta.lv#hasExpectedAnswer -->
+    <!-- https://template.com#hasExpectedAnswer -->
 
-    <owl:DatatypeProperty rdf:about="https://newstart.rta.lv#hasExpectedAnswer">
+    <owl:DatatypeProperty rdf:about="https://template.com#hasExpectedAnswer">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
@@ -125,9 +126,9 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasMaxAllowedValue -->
+    <!-- https://template.com#hasMaxAllowedValue -->
 
-    <owl:DatatypeProperty rdf:about="https://newstart.rta.lv#hasMaxAllowedValue">
+    <owl:DatatypeProperty rdf:about="https://template.com#hasMaxAllowedValue">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
         <rdfs:label xml:lang="en">Has max allowed value</rdfs:label>
@@ -136,9 +137,9 @@
     
 
 
-    <!-- https://newstart.rta.lv#hasMinAllowedValue -->
+    <!-- https://template.com#hasMinAllowedValue -->
 
-    <owl:DatatypeProperty rdf:about="https://newstart.rta.lv#hasMinAllowedValue">
+    <owl:DatatypeProperty rdf:about="https://template.com#hasMinAllowedValue">
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#float"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#int"/>
         <rdfs:label xml:lang="en">Has min allowed value</rdfs:label>
@@ -147,9 +148,9 @@
     
 
 
-    <!-- https://newstart.rta.lv#isMandatory -->
+    <!-- https://template.com#isMandatory -->
 
-    <owl:DatatypeProperty rdf:about="https://newstart.rta.lv#isMandatory">
+    <owl:DatatypeProperty rdf:about="https://template.com#isMandatory">
         <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#FunctionalProperty"/>
         <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
         <rdfs:label xml:lang="lv">Ir obligāts</rdfs:label>
@@ -169,67 +170,67 @@
     
 
 
-    <!-- https://newstart.rta.lv#Category1 -->
+    <!-- https://template.com#Category1 -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Category1">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Parent_Category"/>
+    <owl:Class rdf:about="https://template.com#Category1">
+        <rdfs:subClassOf rdf:resource="https://template.com#Parent_Category"/>
         <rdfs:label xml:lang="en">Category 1</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Category2 -->
+    <!-- https://template.com#Category2 -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Category2">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Parent_Category"/>
+    <owl:Class rdf:about="https://template.com#Category2">
+        <rdfs:subClassOf rdf:resource="https://template.com#Parent_Category"/>
         <rdfs:label xml:lang="en">Category 2</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Day_of_the_week -->
+    <!-- https://template.com#Day_of_the_week -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Day_of_the_week">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Mesurement"/>
+    <owl:Class rdf:about="https://template.com#Day_of_the_week">
+        <rdfs:subClassOf rdf:resource="https://template.com#Mesurement"/>
         <rdfs:label xml:lang="en">Day of the week</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Groups -->
+    <!-- https://template.com#Groups -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Groups">
+    <owl:Class rdf:about="https://template.com#Groups">
         <rdfs:label xml:lang="en">Groups</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Likert_Group -->
+    <!-- https://template.com#Likert_Group -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Likert_Group">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Groups"/>
+    <owl:Class rdf:about="https://template.com#Likert_Group">
+        <rdfs:subClassOf rdf:resource="https://template.com#Groups"/>
         <rdfs:label xml:lang="en">Likert Group</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Mandatory_Question -->
+    <!-- https://template.com#Mandatory_Question -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Mandatory_Question">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
+    <owl:Class rdf:about="https://template.com#Mandatory_Question">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Class>
                         <owl:complementOf>
                             <owl:Restriction>
-                                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category2"/>
+                                <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                                <owl:someValuesFrom rdf:resource="https://template.com#Category2"/>
                             </owl:Restriction>
                         </owl:complementOf>
                     </owl:Class>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#isMandatory"/>
+                        <owl:onProperty rdf:resource="https://template.com#isMandatory"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -239,11 +240,11 @@
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                        <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category1"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                        <owl:someValuesFrom rdf:resource="https://template.com#Category1"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#isMandatory"/>
+                        <owl:onProperty rdf:resource="https://template.com#isMandatory"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean">true</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -251,8 +252,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#yesno"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#yesno"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:label xml:lang="en">Mandatory Question</rdfs:label>
@@ -260,39 +261,39 @@
     
 
 
-    <!-- https://newstart.rta.lv#Mesurement -->
+    <!-- https://template.com#Mesurement -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Mesurement">
+    <owl:Class rdf:about="https://template.com#Mesurement">
         <rdfs:label xml:lang="en">Mesurement</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Parent_Category -->
+    <!-- https://template.com#Parent_Category -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Parent_Category">
+    <owl:Class rdf:about="https://template.com#Parent_Category">
         <rdfs:label xml:lang="en">Parent Category</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#Question_Interval -->
+    <!-- https://template.com#Question_Interval -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_Interval">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
+    <owl:Class rdf:about="https://template.com#Question_Interval">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                        <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category1"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                        <owl:someValuesFrom rdf:resource="https://template.com#Category1"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMaxAllowedValue"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasMaxAllowedValue"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</owl:hasValue>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMinAllowedValue"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasMinAllowedValue"/>
                         <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -300,8 +301,8 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#interval"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#interval"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:label xml:lang="en">Question Interval</rdfs:label>
@@ -309,19 +310,56 @@
     
 
 
-    <!-- https://newstart.rta.lv#Question_Likerta -->
+    <!-- https://template.com#Question_Interval_Inverse -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_Likerta">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
+    <owl:Class rdf:about="https://template.com#Question_Interval_Inverse">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
+        <rdfs:subClassOf>
+            <owl:Class>
+                <owl:intersectionOf rdf:parseType="Collection">
+                    <owl:Class>
+                        <owl:complementOf>
+                            <owl:Restriction>
+                                <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                                <owl:someValuesFrom rdf:resource="https://template.com#Category2"/>
+                            </owl:Restriction>
+                        </owl:complementOf>
+                    </owl:Class>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://template.com#hasMaxAllowedValue"/>
+                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</owl:hasValue>
+                    </owl:Restriction>
+                    <owl:Restriction>
+                        <owl:onProperty rdf:resource="https://template.com#hasMinAllowedValue"/>
+                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</owl:hasValue>
+                    </owl:Restriction>
+                </owl:intersectionOf>
+            </owl:Class>
+        </rdfs:subClassOf>
+        <rdfs:subClassOf>
+            <owl:Restriction>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#interval"/>
+            </owl:Restriction>
+        </rdfs:subClassOf>
+        <rdfs:label xml:lang="en">Question Interval Inverse</rdfs:label>
+    </owl:Class>
+    
+
+
+    <!-- https://template.com#Question_Likerta -->
+
+    <owl:Class rdf:about="https://template.com#Question_Likerta">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                        <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category1"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                        <owl:someValuesFrom rdf:resource="https://template.com#Category1"/>
                     </owl:Restriction>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasExpectedAnswer"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasExpectedAnswer"/>
                         <owl:hasValue>3</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -329,19 +367,19 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#likert"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#likert"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMesurement"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Day_of_the_week"/>
+                <owl:onProperty rdf:resource="https://template.com#hasMesurement"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#Day_of_the_week"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerOptions"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerOptions"/>
                 <owl:hasValue>1
 2
 3
@@ -356,23 +394,23 @@
     
 
 
-    <!-- https://newstart.rta.lv#Question_Likerta_Inverse -->
+    <!-- https://template.com#Question_Likerta_Inverse -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_Likerta_Inverse">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
+    <owl:Class rdf:about="https://template.com#Question_Likerta_Inverse">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:intersectionOf rdf:parseType="Collection">
                     <owl:Class>
                         <owl:complementOf>
                             <owl:Restriction>
-                                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category2"/>
+                                <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                                <owl:someValuesFrom rdf:resource="https://template.com#Category2"/>
                             </owl:Restriction>
                         </owl:complementOf>
                     </owl:Class>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasExpectedAnswer"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasExpectedAnswer"/>
                         <owl:hasValue>3</owl:hasValue>
                     </owl:Restriction>
                 </owl:intersectionOf>
@@ -380,19 +418,19 @@
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#likert"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#likert"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMesurement"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Day_of_the_week"/>
+                <owl:onProperty rdf:resource="https://template.com#hasMesurement"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#Day_of_the_week"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerOptions"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerOptions"/>
                 <owl:hasValue>1
 2
 3
@@ -407,57 +445,20 @@
     
 
 
-    <!-- https://newstart.rta.lv#Question_Range_Inverse -->
+    <!-- https://template.com#Question_YesNo -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_Range_Inverse">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
-        <rdfs:subClassOf>
-            <owl:Class>
-                <owl:intersectionOf rdf:parseType="Collection">
-                    <owl:Class>
-                        <owl:complementOf>
-                            <owl:Restriction>
-                                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category2"/>
-                            </owl:Restriction>
-                        </owl:complementOf>
-                    </owl:Class>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMaxAllowedValue"/>
-                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">60</owl:hasValue>
-                    </owl:Restriction>
-                    <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasMinAllowedValue"/>
-                        <owl:hasValue rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">20</owl:hasValue>
-                    </owl:Restriction>
-                </owl:intersectionOf>
-            </owl:Class>
-        </rdfs:subClassOf>
+    <owl:Class rdf:about="https://template.com#Question_YesNo">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#interval"/>
-            </owl:Restriction>
-        </rdfs:subClassOf>
-        <rdfs:label xml:lang="en">Question Interval Inverse</rdfs:label>
-    </owl:Class>
-    
-
-
-    <!-- https://newstart.rta.lv#Question_YesNo -->
-
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_YesNo">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
-        <rdfs:subClassOf>
-            <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#yesno"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#yesno"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category1"/>
+                <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#Category1"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:label xml:lang="en">Question Yes/No</rdfs:label>
@@ -465,24 +466,24 @@
     
 
 
-    <!-- https://newstart.rta.lv#Question_YesNo_Inverse -->
+    <!-- https://template.com#Question_YesNo_Inverse -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Question_YesNo_Inverse">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#Subtheme"/>
+    <owl:Class rdf:about="https://template.com#Question_YesNo_Inverse">
+        <rdfs:subClassOf rdf:resource="https://template.com#Subtheme"/>
         <rdfs:subClassOf>
             <owl:Class>
                 <owl:complementOf>
                     <owl:Restriction>
-                        <owl:onProperty rdf:resource="https://newstart.rta.lv#hasCategory"/>
-                        <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#Category2"/>
+                        <owl:onProperty rdf:resource="https://template.com#hasCategory"/>
+                        <owl:someValuesFrom rdf:resource="https://template.com#Category2"/>
                     </owl:Restriction>
                 </owl:complementOf>
             </owl:Class>
         </rdfs:subClassOf>
         <rdfs:subClassOf>
             <owl:Restriction>
-                <owl:onProperty rdf:resource="https://newstart.rta.lv#hasAnswerType"/>
-                <owl:someValuesFrom rdf:resource="https://newstart.rta.lv#yesno"/>
+                <owl:onProperty rdf:resource="https://template.com#hasAnswerType"/>
+                <owl:someValuesFrom rdf:resource="https://template.com#yesno"/>
             </owl:Restriction>
         </rdfs:subClassOf>
         <rdfs:label xml:lang="en">Question Yes/No Inverse</rdfs:label>
@@ -490,46 +491,46 @@
     
 
 
-    <!-- https://newstart.rta.lv#Subtheme -->
+    <!-- https://template.com#Subtheme -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#Subtheme">
+    <owl:Class rdf:about="https://template.com#Subtheme">
         <rdfs:comment xml:lang="en">Subtheme structure is determined automatically, based on OWL file structure. In most cases, if it is convenient to work in OWL edito, it will be convenient in the NewStarT project.</rdfs:comment>
         <rdfs:label xml:lang="en">Subtheme</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#interval -->
+    <!-- https://template.com#interval -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#interval">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#typeOfQuestion"/>
+    <owl:Class rdf:about="https://template.com#interval">
+        <rdfs:subClassOf rdf:resource="https://template.com#typeOfQuestion"/>
         <rdfs:label xml:lang="en">Interval</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#likert -->
+    <!-- https://template.com#likert -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#likert">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#typeOfQuestion"/>
+    <owl:Class rdf:about="https://template.com#likert">
+        <rdfs:subClassOf rdf:resource="https://template.com#typeOfQuestion"/>
         <rdfs:label xml:lang="en">Likert</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#typeOfQuestion -->
+    <!-- https://template.com#typeOfQuestion -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#typeOfQuestion">
+    <owl:Class rdf:about="https://template.com#typeOfQuestion">
         <rdfs:label xml:lang="lv">Jautājuma veids</rdfs:label>
         <rdfs:label xml:lang="en">Type of question</rdfs:label>
     </owl:Class>
     
 
 
-    <!-- https://newstart.rta.lv#yesno -->
+    <!-- https://template.com#yesno -->
 
-    <owl:Class rdf:about="https://newstart.rta.lv#yesno">
-        <rdfs:subClassOf rdf:resource="https://newstart.rta.lv#typeOfQuestion"/>
+    <owl:Class rdf:about="https://template.com#yesno">
+        <rdfs:subClassOf rdf:resource="https://template.com#typeOfQuestion"/>
         <rdfs:label xml:lang="en">Yes/No</rdfs:label>
     </owl:Class>
 </rdf:RDF>
@@ -537,3 +538,4 @@
 
 
 <!-- Generated by the OWL API (version 4.2.8.20170104-2310) https://github.com/owlcs/owlapi -->
+
