@@ -225,13 +225,15 @@ class Answer(models.Model):
             score_change = self.get_score_change()
             stack = [(category, score_change[category]) for category in Category.objects.filter(type_question_set__question=self.question).distinct()]
             while stack:
-                category, score_change = stack.pop()
-                score = Score.objects.get(user=self.user, category=category)
-                for key in ["mandatoryTrue", "mandatoryFalse", "true", "false"]:
-                    score.__dict__[key] -= score_change.get(key, 0)
-                score.save()
-                if category.parent:
-                    stack.append((category.parent, score_change))
+                try:
+                    category, score_change = stack.pop()
+                    score = Score.objects.get(user=self.user, category=category)
+                    for key in ["mandatoryTrue", "mandatoryFalse", "true", "false"]:
+                        score.__dict__[key] -= score_change.get(key, 0)
+                    score.save()
+                    if category.parent:
+                        stack.append((category.parent, score_change))
+                except Score.DoesNotExist: pass
     
     def get_score_change(self) -> dict:
         score = defaultdict(dict)
