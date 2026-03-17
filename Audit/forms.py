@@ -34,3 +34,25 @@ class UserCategoryForm(forms.ModelForm):
         widgets = {
             'category': MultiSelect(attrs={'class': 'form-control'}),
         }
+
+class OWL_Upload_Form(forms.ModelForm):
+    file = forms.FileField(
+        label='Upload new file (.rdf, .xml, .owl)',
+        required=False,
+        widget=forms.FileInput(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = OWL_Upload
+        fields = ['file']
+
+class CONF_Upload_Form(forms.Form):
+    conf_file = forms.CharField(
+        label='Configuration file content YAML',
+        initial='{}',
+        widget=forms.Textarea(attrs={
+            'class': 'form-control',
+            'rows': 20,
+            'placeholder': """YAML content of the configuration file."""
+        })
+    )
