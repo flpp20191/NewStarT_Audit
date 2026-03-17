@@ -15,9 +15,18 @@ services:
       - 8000:8000
     volumes:
       - .:/app
-      - sqlite_data:/app/db
-volumes:
-  sqlite_data:
+    environment:
+      DJANGO_SUPERUSER_USERNAME: admin
+      DJANGO_SUPERUSER_EMAIL: admin@example.com
+      DJANGO_SUPERUSER_PASSWORD: 1234
+
+      # Environment variables for Django settings
+      SECRET_KEY: placeholder_generated_secret_key
+      DB_ENGINE: sqlite3
+      DB_NAME: db
+
+      # 5 minutes in seconds
+      SCORE_UPDATE_DELAY: 500
 
 # The commented out section below is an example of how to define a PostgreSQL
 # database that your application can use. `depends_on` tells Docker Compose to

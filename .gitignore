@@ -2,5 +2,4 @@
 **/__pycache__/
 venv
 *.env
-app/private_media/owl_uploads/*.owl
-!app/root/.env
+private_media/owl_uploads/*.owl

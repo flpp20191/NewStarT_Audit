@@ -3,11 +3,13 @@ from pathlib import Path
 import environ
 from django.core.management.base import BaseCommand
 from django.conf import settings
-import MySQLdb
 from django.contrib.auth.models import Group  # Import the Group model
 from django.core.files import File
 from Audit.models import OWL_Upload, OWL_Upload_Configs
 import os
+import django
+from django.contrib.auth import get_user_model
+
 
 env = environ.Env()
 environ.Env.read_env()
@@ -28,30 +30,7 @@ class Command(BaseCommand):
         
         # Print to see if the environment values are correct
         
-        if db_engine == 'mysql':
-            try:
-                # Connect to MySQL server without specifying the database
-                connection = MySQLdb.connect(
-                    host=db_host,
-                    user=db_user,
-                    password=db_password,
-                    port=int(db_port),
-                )
-                connection.autocommit(True)
-                cursor = connection.cursor()
-
-                cursor.execute(f"CREATE DATABASE IF NOT EXISTS {db_name}")
-                self.stdout.write(self.style.SUCCESS(f"Database '{db_name}' created or already exists."))
-            except MySQLdb.Error as e:
-                self.stdout.write(self.style.ERROR(f"Error creating database: {e}"))
-                return
-            finally:
-                if 'cursor' in locals():
-                    cursor.close()
-                if 'connection' in locals():
-                    connection.close()
-
-        elif db_engine == 'sqlite3':
+        if db_engine == 'sqlite3':
             self.stdout.write(self.style.SUCCESS(f"Using SQLite database '{db_name}'."))
 
         else:
@@ -87,3 +66,17 @@ class Command(BaseCommand):
 
                 OWL_Upload_Configs.objects.create(configs=content)
                 self.stdout.write("Config saved")
+        
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "root.settings")
+        django.setup()
+
+        User = get_user_model()
+        username = os.environ.get("DJANGO_SUPERUSER_USERNAME", "admin")
+        email = os.environ.get("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
+        password = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "1234")
+
+        if not User.objects.filter(username=username).exists():
+            User.objects.create_superuser(username=username, email=email, password=password)
+            print(f"Superuser {username} created.")
+        else:
+            print(f"Superuser {username} already exists.")

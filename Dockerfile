@@ -35,13 +35,14 @@ RUN adduser \
 # Leverage a bind mount to requirements.txt to avoid having to copy them into
 # into this layer.
 RUN --mount=type=cache,target=/root/.cache/pip \
-    --mount=type=bind,source=app/requirements.txt,target=app/requirements.txt \
-    python -m pip install -r app/requirements.txt
+    --mount=type=bind,source=requirements.txt,target=requirements.txt \
+    python -m pip install -r requirements.txt
 
 COPY . .
 
 # Switch to the non-privileged user to run the application.
-RUN chmod 777 /app
+RUN chmod +x /app/entrypoint.sh
+RUN mkdir -p /app && chmod -R 777 /app
 USER appuser
 
 # Expose the port that the application listens on.

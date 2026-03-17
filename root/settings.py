@@ -16,7 +16,6 @@ import environ
 
 
 env = environ.Env()
-environ.Env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +25,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env("SECRET_KEY")
+SECRET_KEY = env("SECRET_KEY", default="unsafe-dev-key")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -106,17 +105,6 @@ if DB_ENGINE == "sqlite3":
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / f"{db_name}.sqlite3",
     }
-elif DB_ENGINE=="mysql":
-    DATABASES['default'] = {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER', default='root'),
-        'PASSWORD': env('DB_PASSWORD', default=''),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default='3306'),
-    }
-else:
-    raise ValueError(f"Unsupported DB_ENGINE value: {DB_ENGINE}")
 
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
@@ -178,4 +166,4 @@ PRIVATE_MEDIA_ROOT = os.path.join(BASE_DIR, 'private_media')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # NewStarT Settings
-SCORE_UPDATE_DELAY = float(env('SCORE_UPDATE_DELAY'))
+SCORE_UPDATE_DELAY = float(env('SCORE_UPDATE_DELAY', default='300'))
