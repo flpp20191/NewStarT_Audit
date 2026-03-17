@@ -337,6 +337,14 @@ QUESTION_TYPE:
             OWL_Upload.objects.get(pk=request.POST.get("delete")).delete()
             return redirect('audit:owl_upload')
         file = request.FILES.get('file')
+        if "action" in request.POST:
+            if request.POST.get("action") == "clear_database":
+                Score.objects.all().delete()
+                Answer.objects.all().delete()
+                Subthemes.objects.all().delete()
+                Question.objects.all().delete()
+                Category.objects.all().delete()
+                return redirect('audit:owl_upload')
         if file:
             owl_file = OWL_Upload(file=file)
             owl_file.save()
