@@ -45,22 +45,28 @@ class Command(BaseCommand):
         call_command('migrate')
 
         # Save OWL file
-        for owl_path in ["Example/NewStarT.owl", "Example/template.owl"]:
-            if os.path.exists(owl_path):
-                with open(owl_path, "rb") as f:
-                    obj = OWL_Upload.objects.create()
-                    obj.file.save(owl_path, File(f), save=True)
+        if OWL_Upload.objects.exists():
+            self.stdout.write("OWL files already exist in the database. Skipping upload.")
+        else:
+            for owl_path in ["Example/NewStarT.owl", "Example/template.owl"]:
+                if os.path.exists(owl_path):
+                    with open(owl_path, "rb") as f:
+                        obj = OWL_Upload.objects.create()
+                        obj.file.save(owl_path, File(f), save=True)
 
-                self.stdout.write("OWL file saved")
+                    self.stdout.write("OWL file saved")
 
         # Save config file content
-        for yml_path in ["Example/NewStarT.yml", "Example/template.yml"]:
-            if os.path.exists(yml_path):
-                with open(yml_path, "r") as f:
-                    content = f.read()
+        if OWL_Upload_Configs.objects.exists():
+            self.stdout.write("Config already exists in the database. Skipping upload.")
+        else:
+            for yml_path in ["Example/NewStarT.yml", "Example/template.yml"]:
+                if os.path.exists(yml_path):
+                    with open(yml_path, "r") as f:
+                        content = f.read()
 
-                OWL_Upload_Configs.objects.create(configs=content)
-                self.stdout.write("Config saved")
+                    OWL_Upload_Configs.objects.create(configs=content)
+                    self.stdout.write("Config saved")
         
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "root.settings")
         django.setup()
