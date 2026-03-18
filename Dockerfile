@@ -41,8 +41,10 @@ RUN --mount=type=cache,target=/root/.cache/pip \
 COPY . .
 
 # Switch to the non-privileged user to run the application.
-RUN chmod +x /app/entrypoint.sh
-RUN mkdir -p /app && chmod -R 777 /app
+RUN chmod -R 777 /app
+RUN apt-get update && apt-get install -y dos2unix \
+    && dos2unix /app/entrypoint.sh
+# RUN chmod +x /app/entrypoint.sh
 USER appuser
 
 # Expose the port that the application listens on.

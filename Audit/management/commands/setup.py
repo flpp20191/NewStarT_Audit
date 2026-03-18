@@ -45,7 +45,7 @@ class Command(BaseCommand):
         call_command('migrate')
 
         # Save OWL file
-        for owl_path in ["/app/Example/NewStarT.owl", "/app/Example/template.owl"]:
+        for owl_path in ["Example/NewStarT.owl", "Example/template.owl"]:
             if os.path.exists(owl_path):
                 with open(owl_path, "rb") as f:
                     obj = OWL_Upload.objects.create()
@@ -54,7 +54,7 @@ class Command(BaseCommand):
                 self.stdout.write("OWL file saved")
 
         # Save config file content
-        for yml_path in ["/app/Example/NewStarT.yml", "/app/Example/template.yml"]:
+        for yml_path in ["Example/NewStarT.yml", "Example/template.yml"]:
             if os.path.exists(yml_path):
                 with open(yml_path, "r") as f:
                     content = f.read()
