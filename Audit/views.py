@@ -12,6 +12,8 @@ from django.utils import timezone
 from django.conf import settings
 from django.contrib.auth import authenticate, login, logout
 from owlready2 import *
+import string
+import random
 
 class AuditMain(View):
     template_name = 'Audit/audit_main.html'
@@ -257,6 +259,7 @@ class AuditSettings(LoginRequiredMixin, View):
 from .uploadOWL import uploadOWL
 class OWLUpload(LoginRequiredMixin, View):
     template_name = 'Audit/owlUpload.html'
+    import_template_name = 'Audit/owlImport.html'
     file_upload_form = OWL_Upload_Form
     conf_upload_form = CONF_Upload_Form
 
@@ -266,10 +269,12 @@ class OWLUpload(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         context = {}
         if "pk" in kwargs:
+            context["file"] = OWL_Upload.objects.get(pk=kwargs.get("pk"))
             context["pk"] = kwargs.get("pk")
             if "owl_configs" in request.session:
-                context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": request.session.get("owl_configs")})
+                context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": request.session.get("owl_configs"), "conf_file_name": request.session["conf_file_name"]})
                 del request.session["owl_configs"]
+                del request.session["conf_file_name"]
             elif "conf" in kwargs:
                 config = OWL_Upload_Configs.objects.get(pk=kwargs.get("conf"))
                 context["conf_upload_form"] = self.conf_upload_form(initial={"conf_file": str(config.configs)})
@@ -306,17 +311,19 @@ QUESTION_TYPE:
         - https://template.com#likert
         yes_no:
         - https://template.com#yesno"""})
-            context["conf_files"] = OWL_Upload_Configs.objects.all()
+            context["conf_files"] = OWL_Upload_Configs.objects.all().order_by("-uploaded_at")
+            return render(request, self.import_template_name, context)
         else:
             context["file_upload_form"] = self.file_upload_form()
-            context["owl_files"] = OWL_Upload.objects.all()
-        return render(request, self.template_name, context)
+            context["owl_files"] = OWL_Upload.objects.all().order_by("-uploaded_at")
+            return render(request, self.template_name, context)
     
     def post(self, request, *args, **kwargs):
         if "pk" in kwargs:
             if "delete" in request.POST:
                 OWL_Upload_Configs.objects.get(pk=request.POST.get("delete")).delete()
                 request.session["owl_configs"] = request.POST.get("conf_file")
+                request.session["conf_file_name"] = request.POST.get("conf_file_name")
                 return redirect('audit:owl_upload', pk=kwargs.get("pk"))
             file = OWL_Upload.objects.get(pk=kwargs.get("pk"))
             save = request.POST.get("action") == "save"
@@ -328,10 +335,14 @@ QUESTION_TYPE:
                 messages.error(request, f"Error processing OWL file: {str(e)}")
 
             if owl_upload_result:
-                if save: OWL_Upload_Configs.objects.create(configs=request.POST.get("conf_file"))
+                if request.POST.get("conf_file_name") == "":
+                    name = ''.join(random.choices(string.ascii_letters, k=10))
+                else: name = request.POST.get("conf_file_name")
+                if save: OWL_Upload_Configs.objects.create(configs=request.POST.get("conf_file"), name=name)
                 return redirect('audit:audit')
             else:
                 request.session["owl_configs"] = request.POST.get("conf_file")
+                request.session["conf_file_name"] = request.POST.get("conf_file_name")
                 return redirect('audit:owl_upload', pk=kwargs.get("pk"))
         if "delete" in request.POST:
             OWL_Upload.objects.get(pk=request.POST.get("delete")).delete()
@@ -349,7 +360,7 @@ QUESTION_TYPE:
             owl_file = OWL_Upload(file=file)
             owl_file.save()
             messages.success(request, "OWL file uploaded and processed successfully.")
-            return redirect('audit:owl_upload', pk=owl_file.pk)
+            return redirect('audit:owl_upload')
         else:
             messages.error(request, "No file uploaded. Please select an OWL file to upload.")
             return redirect('audit:owl_upload')

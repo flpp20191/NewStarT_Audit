@@ -47,8 +47,16 @@ class OWL_Upload_Form(forms.ModelForm):
         fields = ['file']
 
 class CONF_Upload_Form(forms.Form):
+    conf_file_name = forms.CharField(
+        label='Configuration name',
+        widget=forms.TextInput(attrs={
+            'class': 'form-control',
+            'placeholder': "Will generate random if blank"
+        }),
+        required=False
+    )
     conf_file = forms.CharField(
-        label='Configuration file content YAML',
+        label='Adding configurations (YAML format)',
         initial='{}',
         widget=forms.Textarea(attrs={
             'class': 'form-control',

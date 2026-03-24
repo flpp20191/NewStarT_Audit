@@ -342,9 +342,10 @@ class OWL_Upload(models.Model):
         return f"{self.pk}. {self.file.name} - {self.uploaded_at.strftime('%Y-%m-%d %H:%M:%S')}"
     
     def delete(self, *args, **kwargs):
-        self.file.delete(save=False)
+        self.file.delete()
         super().delete(*args, **kwargs)
 
 class OWL_Upload_Configs(models.Model):
+    name = models.CharField(max_length=200, default=None, null=True)
     configs = models.TextField()
     uploaded_at = models.DateTimeField(auto_now_add=True)

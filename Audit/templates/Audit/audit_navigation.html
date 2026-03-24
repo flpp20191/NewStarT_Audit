@@ -42,7 +42,7 @@
         <li class="nav-item">
             {% url 'audit:owl_upload' as link %}
             <a href="{{ link }}" class="nav-link {% if request.resolver_match.view_name == "audit:owl_upload" %}active{% endif %}" aria-current="page">
-                Upload OWL file
+                OWL management
             </a>
         </li>
         {% endif %}
