@@ -8,7 +8,7 @@ from django.core.files import File
 from Audit.models import OWL_Upload, OWL_Upload_Configs
 import os
 import django
-from django.contrib.auth import get_user_model
+from django.contrib.auth.models import User
 
 
 env = environ.Env()
@@ -60,24 +60,24 @@ class Command(BaseCommand):
         if OWL_Upload_Configs.objects.exists():
             self.stdout.write("Config already exists in the database. Skipping upload.")
         else:
-            for yml_path in ["Example/NewStarT.yml", "Example/template.yml"]:
-                if os.path.exists(yml_path):
-                    with open(yml_path, "r") as f:
+            for yml_path in [("Example/NewStarT.yml", "NewStarT"), ("Example/template.yml", "template")]:
+                if os.path.exists(yml_path[0]):
+                    with open(yml_path[0], "r") as f:
                         content = f.read()
 
-                    OWL_Upload_Configs.objects.create(configs=content)
+                    OWL_Upload_Configs.objects.create(configs=content, name=yml_path[1])
                     self.stdout.write("Config saved")
         
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "root.settings")
         django.setup()
 
-        User = get_user_model()
-        username = os.environ.get("DJANGO_SUPERUSER_USERNAME", "admin")
-        email = os.environ.get("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
-        password = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "1234")
+        if not User.objects.exists():
+            username = os.environ.get("DJANGO_SUPERUSER_USERNAME", "admin")
+            email = os.environ.get("DJANGO_SUPERUSER_EMAIL", "admin@example.com")
+            password = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "1234")
 
-        if not User.objects.filter(username=username).exists():
-            User.objects.create_superuser(username=username, email=email, password=password)
-            print(f"Superuser {username} created.")
-        else:
-            print(f"Superuser {username} already exists.")
+            if not User.objects.filter(username=username).exists():
+                User.objects.create_superuser(username=username, email=email, password=password)
+                print(f"Superuser {username} created.")
+            else:
+                print(f"Superuser {username} already exists.")
