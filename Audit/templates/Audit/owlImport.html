@@ -1,0 +1,53 @@
+{% extends 'Audit/audit_base.html' %}
+{% load static %}
+{% block static_files %}
+    <link rel="stylesheet" href="{% static 'audit\audit.css' %}">
+{% endblock %}
+
+{% if request.user.is_superuser %}
+    {% block content %}
+    <div class="container-fluid mt-4">
+        <h2 class="mb-4 text-center">
+            <a class="text-dark" href="{% url 'audit:owl_upload' %}">⇽</a>
+            OWL management - adding <span class="text-muted"><i><u>{{file.file.name}}</u></i></span> to audit
+        </h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ conf_upload_form.conf_file_name.label_tag }}
+            {{ conf_upload_form.conf_file_name }}
+            {{ conf_upload_form.conf_file_name.errors }}
+
+            {{ conf_upload_form.conf_file.label_tag }}
+            {{ conf_upload_form.conf_file }}
+            {{ conf_upload_form.conf_file.errors }}
+            <button type="submit" class="btn btn-primary mt-2">Add OWL data</button>
+            <button type="submit" class="btn btn-outline-primary mt-2" name="action" value="save">Add OWL data and save configurations</button>
+
+            <h3 class="m-4">Saved configurations</h3>
+            <table class="table mt-4">
+                <tr>
+                    <th>Configuration name</th>
+                    <th>Date</th>
+                    <th>Actions</th>
+                </tr>
+                {% for conf in conf_files %}
+                <tr>
+                    <td>
+                        <b>{{ conf.name }}</b>
+                    </td>
+                    <td>{{ conf.uploaded_at|date:"Y-m-d H:i:s" }}</td>
+                    <td>
+                        <a class="btn btn-primary" href="{% url 'audit:owl_upload' pk=pk conf=conf.pk %}">Load configurations</a>
+                        <button type="submit" class="btn btn-outline-primary" name="delete" value="{{ conf.pk }}" onclick="return confirm('Configs will be deleted irreversibly');">Delete</button>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="3" class="text-muted">No config files added</td>
+                </tr>
+                {% endfor %}
+            </table>
+        </form>
+    </div>
+    {% endblock %}
+{% endif %}
